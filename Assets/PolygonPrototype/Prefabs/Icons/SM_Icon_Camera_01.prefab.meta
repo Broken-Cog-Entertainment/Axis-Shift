@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 99698dc12d556854e9958d55e495cc35
+timeCreated: 1547159153
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Icon_Camera_01.prefab
+  uploadId: 735869

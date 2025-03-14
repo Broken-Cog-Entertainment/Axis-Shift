@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 988c2e2fad5caf64788ccfa98656d40d
+timeCreated: 1547092679
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Materials/Triplanar_ObjectSpace/PolygonPrototype_Glass_Object.mat
+  uploadId: 735869

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e1b9e21039285c042b92ea66c7f1c444
+timeCreated: 1547159223
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Props/SM_Prop_Crate_01.prefab
+  uploadId: 735869

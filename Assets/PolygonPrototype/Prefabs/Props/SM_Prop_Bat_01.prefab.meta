@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 133f932775f5bff43a09e7bcb2f346dc
+timeCreated: 1547159221
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Props/SM_Prop_Bat_01.prefab
+  uploadId: 735869

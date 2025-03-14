@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 194f8fbf67729fd40936b3465af2cc47
+timeCreated: 1547090973
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Characters/Character_Male_Face_01.prefab
+  uploadId: 735869

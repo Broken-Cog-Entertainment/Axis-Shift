@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1963c4ec2cb504e44965c4707b8cafb9
+timeCreated: 1572561023
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/NewAssets/SM_Prop_Microphone_01.prefab
+  uploadId: 735869

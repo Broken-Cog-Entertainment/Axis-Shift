@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b29b192d3f1693a46bb6763e3a279d41
+timeCreated: 1572561024
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/NewAssets/SM_Prop_TableTennis_Ball_02.prefab
+  uploadId: 735869

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d6f2a6aa53be2674580ae1599bb9a33e
+timeCreated: 1546825084
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Shaders/Prototype_Global.shader
+  uploadId: 735869

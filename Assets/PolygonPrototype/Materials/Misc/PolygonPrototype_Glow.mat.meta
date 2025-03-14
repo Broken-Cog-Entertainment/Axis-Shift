@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5a9603aa200ca0c45bf4ce1b20e1a39a
+timeCreated: 1547175566
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Materials/Misc/PolygonPrototype_Glow.mat
+  uploadId: 735869

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ec2a552950162a147827557e652c9a1f
+timeCreated: 1547159177
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Icon_Skull_02.prefab
+  uploadId: 735869

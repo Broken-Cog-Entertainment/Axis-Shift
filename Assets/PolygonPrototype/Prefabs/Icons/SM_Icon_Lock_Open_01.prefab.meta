@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0e9b464453faafe48922b747d8086bd0
+timeCreated: 1547159167
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Icon_Lock_Open_01.prefab
+  uploadId: 735869

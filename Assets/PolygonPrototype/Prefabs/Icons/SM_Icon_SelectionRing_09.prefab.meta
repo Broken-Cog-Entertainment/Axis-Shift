@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cce517d27209e4b4c8257a723be1e9da
+timeCreated: 1547159176
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Icon_SelectionRing_09.prefab
+  uploadId: 735869

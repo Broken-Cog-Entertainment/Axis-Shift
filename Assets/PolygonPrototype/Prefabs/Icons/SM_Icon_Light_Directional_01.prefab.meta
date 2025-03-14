@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: aa0557be1d6ffea4b9714f0d076c2c7e
+timeCreated: 1547159166
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Icon_Light_Directional_01.prefab
+  uploadId: 735869

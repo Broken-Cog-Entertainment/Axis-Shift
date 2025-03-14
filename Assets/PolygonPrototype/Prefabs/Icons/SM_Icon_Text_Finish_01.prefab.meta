@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 36a87dcbfd9a36f4f9a07d2a8b1cc28d
+timeCreated: 1547159180
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Icon_Text_Finish_01.prefab
+  uploadId: 735869

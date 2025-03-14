@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a5bbe08e8d4661845bb71068b601744c
+timeCreated: 1547159204
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Props/SM_Switch_Button_02.prefab
+  uploadId: 735869

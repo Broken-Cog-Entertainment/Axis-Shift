@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 400e2f511a37d5641a67cc708e2e50a0
+timeCreated: 1547159184
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Icon_Weather_Rain_01.prefab
+  uploadId: 735869

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2f3e27eecb190e44a9af50723c394274
+timeCreated: 1547090970
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Characters/Character_Dummy_Male_01.prefab
+  uploadId: 735869

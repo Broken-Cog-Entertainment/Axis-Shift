@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 02617dcd35560444aa38ceaec08f0cca
+timeCreated: 1547159187
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Icons/SM_Note_Fix_01.prefab
+  uploadId: 735869

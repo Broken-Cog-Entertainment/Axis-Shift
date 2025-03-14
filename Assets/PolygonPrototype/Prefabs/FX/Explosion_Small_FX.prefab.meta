@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4dd02b5f854b6c84990fbeb810abffe4
+timeCreated: 1517358291
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/FX/Explosion_Small_FX.prefab
+  uploadId: 735869

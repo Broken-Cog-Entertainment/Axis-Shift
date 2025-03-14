@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a48c66cea6b296343a9a954ab39c7cdc
+timeCreated: 1547159163
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 137126
+  packageName: POLYGON Prototype - Low Poly 3D Art by Synty
+  packageVersion: 1.8.2
+  assetPath: Assets/PolygonPrototype/Prefabs/Generic/SM_Generic_TreeDead_01.prefab
+  uploadId: 735869
