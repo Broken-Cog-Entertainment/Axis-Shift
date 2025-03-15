@@ -56,7 +56,7 @@ namespace AS.Player
 
         private void Start()
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _mainCamera = Camera.main;
             _rb.freezeRotation = true;
