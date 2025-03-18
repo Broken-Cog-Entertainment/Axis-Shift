@@ -25,7 +25,7 @@ namespace Shapes {
 		public static ShapesTextPool Instance {
 			get {
 				if( instance == null ) {
-					instance = Object.FindObjectOfType<ShapesTextPool>();
+					instance = Object.FindFirstObjectByType<ShapesTextPool>();
 					if( instance == null )
 						instance = ShapesTextPool.CreatePool();
 				}
@@ -106,7 +106,7 @@ namespace Shapes {
 			elem.hideFlags = HideFlags.HideAndDontSave;
 
 			TextMeshPro tmp = elem.AddComponent<TextMeshPro>();
-			tmp.enableWordWrapping = false;
+			tmp.textWrappingMode = TextWrappingModes.NoWrap;
 			tmp.overflowMode = TextOverflowModes.Overflow;
 
 			// mesh renderer should exist now due to TMP requiring the component

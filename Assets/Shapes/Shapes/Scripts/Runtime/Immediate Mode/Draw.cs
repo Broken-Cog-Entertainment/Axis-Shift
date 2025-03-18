@@ -437,13 +437,13 @@ namespace Shapes {
 
 			// positioning & wrapping
 			if( isRect ) {
-				tmp.enableWordWrapping = TextWrap;
+				tmp.textWrappingMode = TextWrap ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
 				tmp.overflowMode = TextOverflow;
 				tmp.rectTransform.pivot = pivot;
 				tmp.rectTransform.sizeDelta = size;
 			} else {
 				// when we're drawing text without a rectangle, we just always overflow and ignore pivots/sizing/wrapping
-				tmp.enableWordWrapping = false;
+				tmp.textWrappingMode = TextWrappingModes.NoWrap;
 				tmp.overflowMode = TextOverflowModes.Overflow;
 				// tmp.rectTransform.pivot not set, since pivot is ignored when size = 0 anyway
 				tmp.rectTransform.sizeDelta = default;
