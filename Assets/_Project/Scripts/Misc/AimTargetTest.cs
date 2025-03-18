@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace AS
+namespace AS.Misc
 {
     [RequireComponent(typeof(BoxCollider))]
     public class AimTargetTest : MonoBehaviour

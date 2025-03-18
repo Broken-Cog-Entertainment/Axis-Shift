@@ -15,11 +15,17 @@ namespace AS.Weapons
             var direction = (target - transform.position).normalized;
 
             transform.position += direction * (speed * Time.deltaTime);
+            transform.LookAt(target);
 
             if (Vector3.Distance(target, transform.position) < destroyWhenRange)
             {
                 Destroy(gameObject);
             }
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            Destroy(gameObject);
         }
     }
 }
