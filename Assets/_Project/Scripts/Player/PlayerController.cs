@@ -171,9 +171,24 @@ namespace AS.Player
 
             var speedBoost = _isBoosted ? 10f : 0;
 
-            _rb.linearVelocity =
+            TargetLockOn lockOn = this.GetComponent<TargetLockOn>();
+            if(lockOn.target != null)
+            {
+                if(lockOn.distanceToTarget <= 10f)
+                {
+                    _rb.linearVelocity = Vector3.zero;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else 
+            {
+                _rb.linearVelocity =
                 transform.forward * (Mathf.Min(directionalThrust + manualThrust, maxSpeed) + speedBoost);
-
+            }
+           
             _rb.AddForce(transform.right.With(y: 0).normalized * (Input.GetAxis("Horizontal") * 3f),
                 ForceMode.VelocityChange);
             _rb.AddForce(Vector3.up * groundLiftForce, ForceMode.VelocityChange);
@@ -192,7 +207,7 @@ namespace AS.Player
         }
 
         // ReSharper disable once UnusedMember.Local
-        private void OnToggleAim(InputValue value)
+        public void OnToggleAim(InputValue value)
         {
             // var isAiming = value.isPressed;
             // if (isAiming == _isAiming) return;
@@ -244,6 +259,7 @@ namespace AS.Player
             bullet.transform.position = spawnPoint;
             bullet.target = target;
             bullet.transform.LookAt(target);
+            bullet.GetComponent<Bullet>().shooter = this.gameObject;
 
             _lastFiredTimer = FireDelay;
 

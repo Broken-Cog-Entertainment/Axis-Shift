@@ -168,6 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfdcc4f531d244a4aa860f36c6fc92b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shooter: {fileID: 0}
+  damageAmount: 8
   speed: 300
   destroyWhenRange: 0.2
   target: {x: 0, y: 0, z: 0}
