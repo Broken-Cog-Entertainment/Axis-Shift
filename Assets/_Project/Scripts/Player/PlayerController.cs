@@ -17,6 +17,7 @@ namespace AS.Player
         public AnimationCurve aimingThrustControl;
         public float maxThrust = 10f;
         public float maxSpeed = 20f;
+        public float minDistanceToEnemy = 20f;
 
         [Header("Ground Lift Force")]
         public float groundLiftCheckDistance;
@@ -172,7 +173,7 @@ namespace AS.Player
             var speedBoost = _isBoosted ? 10f : 0;
 
             TargetLockOn lockOn = this.GetComponent<TargetLockOn>();
-            if(lockOn.target != null && lockOn.distanceToTarget <= 20f)
+            if(lockOn.target != null && lockOn.distanceToTarget <= minDistanceToEnemy)
             {
                 _rb.linearVelocity = Vector3.zero;
             }
