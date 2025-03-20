@@ -1668,9 +1668,11 @@ MonoBehaviour:
   lockOnRadius: 2
   lockOnCam: {fileID: 1434968995}
   distanceToTarget: 0
-  lockBreakInput: 10
-  lockBreakDistance: 10
+  lockBreakInput: 2
+  lockBreakDistance: 25
   lockBreakMovement: 0.5
+  lockBreakTimer: 0
+  lockBreakThreshold: 0.5
 --- !u!1 &880964069
 GameObject:
   m_ObjectHideFlags: 0
@@ -2146,7 +2148,7 @@ MonoBehaviour:
   rotateSpeed: 50
   accelerateSpeed: 0
   projectilePrefab: {fileID: 1256448832432422256, guid: 59ace3322f86cb34e902e2bbf58578f5, type: 3}
-  attackRate: 0.3
+  attackRate: 1
   attackBurst: 1
   attackDamage: 5
   nextFire: 0
@@ -4732,7 +4734,7 @@ MonoBehaviour:
   rotateSpeed: 5
   accelerateSpeed: 8
   projectilePrefab: {fileID: 1256448832432422256, guid: 59ace3322f86cb34e902e2bbf58578f5, type: 3}
-  attackRate: 0.5
+  attackRate: 1.5
   attackBurst: 1
   attackDamage: 25
   nextFire: 1

@@ -172,23 +172,17 @@ namespace AS.Player
             var speedBoost = _isBoosted ? 10f : 0;
 
             TargetLockOn lockOn = this.GetComponent<TargetLockOn>();
-            if(lockOn.target != null)
+            if(lockOn.target != null && lockOn.distanceToTarget <= 20f)
             {
-                if(lockOn.distanceToTarget <= 10f)
-                {
-                    _rb.linearVelocity = Vector3.zero;
-                }
-                else
-                {
-                    return;
-                }
+                _rb.linearVelocity = Vector3.zero;
             }
-            else 
+            else
             {
                 _rb.linearVelocity =
                 transform.forward * (Mathf.Min(directionalThrust + manualThrust, maxSpeed) + speedBoost);
             }
-           
+            
+
             _rb.AddForce(transform.right.With(y: 0).normalized * (Input.GetAxis("Horizontal") * 3f),
                 ForceMode.VelocityChange);
             _rb.AddForce(Vector3.up * groundLiftForce, ForceMode.VelocityChange);

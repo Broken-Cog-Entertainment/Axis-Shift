@@ -26,6 +26,8 @@ public class TargetLockOn : MonoBehaviour
     public float lockBreakInput;
     public float lockBreakDistance;
     public float lockBreakMovement;
+    public float lockBreakTimer;
+    public float lockBreakThreshold;
 
     private Vector3 lastPlayerPos;
     private Vector2 lastMousePos;
@@ -50,9 +52,13 @@ public class TargetLockOn : MonoBehaviour
             LockOnToTarget();
             CheckLockBreak();
 
-            if(target != null)
+            if (target != null)
             {
                 distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+            }
+            else
+            {
+                distanceToTarget = Mathf.Infinity;
             }
         }
 
@@ -75,26 +81,26 @@ public class TargetLockOn : MonoBehaviour
         if (target == null) return;
 
         float distance = Vector3.Distance(transform.position, target.position);
-        if(distance > viewRange + lockBreakDistance)
-        {
-            UnlockTarget();
-            return;
-        }
-
+       
         float movement = Vector3.Distance(transform.position, lastPlayerPos);
-        if(movement > lockBreakMovement)
-        {
-            UnlockTarget();
-            return;
-        }
-
+      
         Vector2 mousePos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         float mouseMovement = Vector2.Distance(mousePos, lastMousePos);
 
-        if(mouseMovement >= lockBreakInput)
+        bool shouldUnlock = distance > (viewRange + lockBreakDistance) || movement > lockBreakMovement || mouseMovement >= lockBreakInput;
+
+        if (shouldUnlock)
         {
-            UnlockTarget();
-            return;
+            lockBreakTimer += Time.deltaTime;
+
+            if(lockBreakTimer >= lockBreakThreshold)
+            {
+                UnlockTarget();
+            }
+        }
+        else
+        {
+            lockBreakTimer = 0;
         }
 
         lastPlayerPos = transform.position;
@@ -102,6 +108,7 @@ public class TargetLockOn : MonoBehaviour
 
     void UnlockTarget()
     {
+        Debug.Log("Unlocking target!");
         target = null;
     }
 }
