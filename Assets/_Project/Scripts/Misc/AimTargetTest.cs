@@ -15,6 +15,7 @@ namespace AS.Misc
         {
             _camera = Camera.main;
             _renderer = GetComponent<MeshRenderer>();
+
             _myColor = new MaterialPropertyBlock();
             _myColor.SetColor(BaseColor, Color.green);
             _renderer.SetPropertyBlock(_myColor, 0);
