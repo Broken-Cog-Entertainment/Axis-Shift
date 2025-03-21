@@ -3,67 +3,70 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyHealth : MonoBehaviour, IDamageable
+namespace AS
 {
-    [field: SerializeField] public float health { get; set; }
-    private float currentHealth;
-
-    public GameObject sliderPrefab;
-    public GameObject enemyCanvas;
-
-    public Slider healthSlider;
-
-    public float maxHealthBarVisibleTime;
-    private float currentHealthBarVisibleTime;
-
-    private void Start()
+    public class EnemyHealth : MonoBehaviour, IDamageable
     {
-        GameObject slider = Instantiate(sliderPrefab) as GameObject;
-        enemyCanvas = GameObject.FindWithTag("EnemyCanvas");
-        slider.transform.SetParent(enemyCanvas.transform);
-        slider.GetComponent<EnemyHealthBar>().enemyPos = this.transform;
-        healthSlider = slider.GetComponent<Slider>();
+        [field: SerializeField] public float health { get; set; }
+        private float currentHealth;
 
-        currentHealth = health;
-        UpdateHealthBar();
-        healthSlider.gameObject.SetActive(false);
-    }
+        public GameObject sliderPrefab;
+        public GameObject enemyCanvas;
 
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        UpdateHealthBar();
-        currentHealthBarVisibleTime = maxHealthBarVisibleTime;
+        public Slider healthSlider;
 
-        this.GetComponent<EnemyBehaviour>().alerted = true;
-    }
+        public float maxHealthBarVisibleTime;
+        private float currentHealthBarVisibleTime;
 
-    private void Update()
-    {
-        if(currentHealth <= 0)
+        private void Start()
         {
-            Destroy(this.gameObject);
-        }
+            GameObject slider = Instantiate(sliderPrefab) as GameObject;
+            enemyCanvas = GameObject.FindWithTag("EnemyCanvas");
+            slider.transform.SetParent(enemyCanvas.transform);
+            slider.GetComponent<EnemyHealthBar>().enemyPos = this.transform;
+            healthSlider = slider.GetComponent<Slider>();
 
-        currentHealthBarVisibleTime -= Time.deltaTime;
-
-        if(currentHealthBarVisibleTime > 0)
-        {
-            healthSlider.gameObject.SetActive(true);
-        }
-        else
-        {
+            currentHealth = health;
+            UpdateHealthBar();
             healthSlider.gameObject.SetActive(false);
         }
-    }
 
-    void UpdateHealthBar()
-    {
-        healthSlider.value = currentHealth / health;
-    }
+        public void TakeDamage(float damage)
+        {
+            currentHealth -= damage;
+            UpdateHealthBar();
+            currentHealthBarVisibleTime = maxHealthBarVisibleTime;
 
-    public float GetHealth()
-    {
-        return health;
+            this.GetComponent<EnemyBehaviour>().alerted = true;
+        }
+
+        private void Update()
+        {
+            if (currentHealth <= 0)
+            {
+                Destroy(this.gameObject);
+            }
+
+            currentHealthBarVisibleTime -= Time.deltaTime;
+
+            if (currentHealthBarVisibleTime > 0)
+            {
+                healthSlider.gameObject.SetActive(true);
+            }
+            else
+            {
+                healthSlider.gameObject.SetActive(false);
+            }
+        }
+
+        void UpdateHealthBar()
+        {
+            healthSlider.value = currentHealth / health;
+        }
+
+        public float GetHealth()
+        {
+            return health;
+        }
     }
 }

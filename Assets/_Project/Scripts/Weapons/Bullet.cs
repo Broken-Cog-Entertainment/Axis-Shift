@@ -22,7 +22,7 @@ namespace AS.Weapons
 
             if (Vector3.Distance(target, transform.position) < destroyWhenRange)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
 
@@ -35,7 +35,7 @@ namespace AS.Weapons
             {
                 hit.TakeDamage(damageAmount);
                 Debug.Log("Hit " + other.gameObject.name);
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
 
             else

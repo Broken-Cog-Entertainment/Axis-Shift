@@ -272,11 +272,15 @@ namespace AS.Player
                 target = hitInfo.distance < 20f ? hitInfo.point : transform.position + transform.forward * maxRange;
             }
 
-            var bullet = Instantiate(bulletPrefab);
-            bullet.transform.position = spawnPoint;
-            bullet.target = target;
-            bullet.transform.LookAt(target);
-            bullet.GetComponent<Bullet>().shooter = this.gameObject;
+            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+            if (bullet != null)
+            {
+                bullet.transform.position = spawnPoint;
+                bullet.SetActive(true);
+                bullet.GetComponent<Bullet>().target = target;
+                //bullet.transform.LookAt(target);
+                bullet.GetComponent<Bullet>().shooter = this.gameObject;
+            }
 
             _lastFiredTimer = FireDelay;
 
