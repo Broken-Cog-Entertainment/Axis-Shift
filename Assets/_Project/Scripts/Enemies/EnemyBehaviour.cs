@@ -153,6 +153,7 @@ public class EnemyBehaviour : MonoBehaviour
                 GameObject projectile = Instantiate(projectilePrefab, firePos[i].position, Quaternion.identity);
                 projectile.GetComponent<Bullet>().shooter = this.gameObject;
                 projectile.GetComponent<Bullet>().damageAmount = attackDamage;
+                projectile.GetComponent<Bullet>().speed = fireVelocity;
 
                 projectile.GetComponent<Bullet>().target = player.position;
                 projectile.GetComponent<Bullet>().transform.LookAt(player);

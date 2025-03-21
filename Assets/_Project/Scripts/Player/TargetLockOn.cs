@@ -32,6 +32,8 @@ public class TargetLockOn : MonoBehaviour
     private Vector3 lastPlayerPos;
     private Vector2 lastMousePos;
 
+    public Quaternion currentRotation;
+
 
     private void Update()
     {
@@ -51,6 +53,8 @@ public class TargetLockOn : MonoBehaviour
         {
             LockOnToTarget();
             CheckLockBreak();
+
+            lockedOn = true;
 
             if (target != null)
             {
@@ -110,5 +114,8 @@ public class TargetLockOn : MonoBehaviour
     {
         Debug.Log("Unlocking target!");
         target = null;
+        lockedOn = false;
+
+        currentRotation = transform.rotation;
     }
 }

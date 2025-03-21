@@ -69,6 +69,9 @@ namespace AS.Player
 
         private float FireDelay => 1f / fireRate;
 
+        bool isLockingOn;
+        Quaternion lockOnRotation;
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody>();
@@ -154,8 +157,6 @@ namespace AS.Player
 
         private void FixedUpdate()
         {
-            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, Quaternion.Euler(pitch, yaw, manualRoll + roll), 0.5f));
-
             var manualThrust = _activeThrustControl.Evaluate(Input.GetAxis("Vertical"));
 
             var directionalThrust =
@@ -173,18 +174,39 @@ namespace AS.Player
             var speedBoost = _isBoosted ? 10f : 0;
 
             TargetLockOn lockOn = this.GetComponent<TargetLockOn>();
-            if(lockOn.target != null && lockOn.distanceToTarget <= minDistanceToEnemy)
+
+            bool isLockedOn = lockOn.target != null;
+            if(isLockedOn)
             {
-                _rb.linearVelocity = Vector3.zero;
+                lockOnRotation = _rb.rotation;
+
+                if (lockOn.distanceToTarget <= minDistanceToEnemy)
+                {
+                    _rb.linearVelocity = Vector3.zero;
+                }
+                else
+                {
+                    _rb.linearVelocity =
+                transform.forward * (Mathf.Min(directionalThrust + manualThrust, maxSpeed) + speedBoost);
+                }
             }
             else
             {
+                if (isLockedOn)
+                {
+                    _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, lockOnRotation, 0.5f));
+                    isLockedOn = false;
+                }
+                else
+                {
+                    _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, Quaternion.Euler(pitch, yaw, manualRoll + roll), 0.5f));
+                }
                 _rb.linearVelocity =
                 transform.forward * (Mathf.Min(directionalThrust + manualThrust, maxSpeed) + speedBoost);
             }
             
 
-            _rb.AddForce(transform.right.With(y: 0).normalized * (Input.GetAxis("Horizontal") * 3f),
+            _rb.AddForce(transform.right.With(y: 0).normalized * (Input.GetAxis("Horizontal") * 6f),
                 ForceMode.VelocityChange);
             _rb.AddForce(Vector3.up * groundLiftForce, ForceMode.VelocityChange);
             _rb.AddForce(-Physics.gravity, ForceMode.Acceleration);

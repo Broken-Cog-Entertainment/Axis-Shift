@@ -9,7 +9,7 @@ namespace AS.Weapons
         public float damageAmount;
 
         public float speed = 10f;
-        public float destroyWhenRange = 0.5f;
+        public float destroyWhenRange = 1f;
         
         public Vector3 target;
 
@@ -35,6 +35,7 @@ namespace AS.Weapons
             {
                 hit.TakeDamage(damageAmount);
                 Debug.Log("Hit " + other.gameObject.name);
+                Destroy(gameObject);
             }
 
             else
