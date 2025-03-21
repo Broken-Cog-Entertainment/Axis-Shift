@@ -34,7 +34,6 @@ namespace AS.Weapons
             if (other.gameObject.TryGetComponent(out IDamageable hit))
             {
                 hit.TakeDamage(damageAmount);
-                Destroy(gameObject);
                 Debug.Log("Hit " + other.gameObject.name);
             }
 
@@ -44,7 +43,6 @@ namespace AS.Weapons
                 if (activateSwitch != null)
                 {
                     activateSwitch.Activate();
-                    Destroy(gameObject);
                 }
             }
         }

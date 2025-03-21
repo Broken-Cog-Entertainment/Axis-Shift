@@ -170,6 +170,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shooter: {fileID: 0}
   damageAmount: 8
-  speed: 150
+  speed: 300
   destroyWhenRange: 0.2
   target: {x: 0, y: 0, z: 0}
