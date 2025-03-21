@@ -67,6 +67,9 @@ namespace AS.Player
 
         private Rigidbody _rb;
 
+        [SerializeField] private Quaternion lockOnRotation;
+        [SerializeField] private bool isLockedOn;
+
         private float FireDelay => 1f / fireRate;
 
         private void Awake()
@@ -154,7 +157,7 @@ namespace AS.Player
 
         private void FixedUpdate()
         {
-            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, Quaternion.Euler(pitch, yaw, manualRoll + roll), 0.5f));
+           // _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, Quaternion.Euler(pitch, yaw, manualRoll + roll), 0.5f));
 
             var manualThrust = _activeThrustControl.Evaluate(Input.GetAxis("Vertical"));
 
@@ -173,16 +176,33 @@ namespace AS.Player
             var speedBoost = _isBoosted ? 10f : 0;
 
             TargetLockOn lockOn = this.GetComponent<TargetLockOn>();
-            if(lockOn.target != null && lockOn.distanceToTarget <= minDistanceToEnemy)
+
+            if (lockOn.target != null)
             {
-                _rb.linearVelocity = Vector3.zero;
+                if (!isLockedOn)
+                {
+                    lockOnRotation = transform.rotation;
+                }
+                isLockedOn = true;
+
+                if (lockOn.distanceToTarget <= minDistanceToEnemy)
+                {
+                    _rb.linearVelocity = Vector3.zero;
+                }
             }
-            else
+            else if (isLockedOn)
+            {
+                isLockedOn = false;
+            }
+
+            Quaternion targetRotation = isLockedOn ? lockOnRotation : Quaternion.Euler(pitch, yaw, manualRoll + roll);
+            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, targetRotation, 0.1f));
+
+            if (!isLockedOn)
             {
                 _rb.linearVelocity =
                 transform.forward * (Mathf.Min(directionalThrust + manualThrust, maxSpeed) + speedBoost);
             }
-            
 
             _rb.AddForce(transform.right.With(y: 0).normalized * (Input.GetAxis("Horizontal") * 3f),
                 ForceMode.VelocityChange);
