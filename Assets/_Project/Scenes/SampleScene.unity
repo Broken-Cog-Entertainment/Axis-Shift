@@ -1570,6 +1570,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   maxThrust: 25
   maxSpeed: 20
+  minDistanceToEnemy: 20
   groundLiftCheckDistance: 4
   groundLiftMaxForce: 5
   applyGroundForceLayerMask:
@@ -1665,9 +1666,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   viewRange: 100
-  lockOnRadius: 2
+  lockOnRadius: 4
   lockOnCam: {fileID: 1434968995}
-  distanceToTarget: 0
+  distanceToTarget: 20
   lockBreakInput: 2
   lockBreakDistance: 25
   lockBreakMovement: 0.5
