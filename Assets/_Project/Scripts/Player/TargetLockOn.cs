@@ -13,6 +13,7 @@ public class TargetLockOn : MonoBehaviour
     public Transform target;
 
     public bool lockedOn = false;
+    public bool canLockOn = true;
     //public Image crosshairIcon;
 
     public LayerMask enemyLayer;
@@ -28,6 +29,7 @@ public class TargetLockOn : MonoBehaviour
     public float lockBreakMovement;
     public float lockBreakTimer;
     public float lockBreakThreshold;
+    public float lockOnCoolDown;
 
     private Vector3 lastPlayerPos;
     private Vector2 lastMousePos;
@@ -40,21 +42,34 @@ public class TargetLockOn : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
         RaycastHit hit;
 
-        if(Physics.SphereCast(ray, lockOnRadius, out hit, viewRange, enemyLayer))
+        if (target == null && canLockOn)
         {
-            target = hit.transform;
-        }
-        else
-        {
-            target = null;
+            if (Physics.SphereCast(ray, lockOnRadius, out hit, viewRange, enemyLayer))
+            {
+                target = hit.transform;
+                lockedOn = true;
+            }
+            else
+            {
+                Debug.Log("No valid target found.");
+            }
         }
 
-        if(target != null)
+        if (!canLockOn)
+        {
+            lockOnCoolDown += Time.deltaTime;
+
+            if (lockOnCoolDown >= 0.5f)
+            {
+                canLockOn = true;
+                lockOnCoolDown = 0f;
+            }
+        }
+
+        if (target != null && lockedOn)
         {
             LockOnToTarget();
             CheckLockBreak();
-
-            lockedOn = true;
 
             if (target != null)
             {
@@ -65,8 +80,6 @@ public class TargetLockOn : MonoBehaviour
                 distanceToTarget = Mathf.Infinity;
             }
         }
-
-
     }
 
     void LockOnToTarget()
@@ -85,13 +98,12 @@ public class TargetLockOn : MonoBehaviour
         if (target == null) return;
 
         float distance = Vector3.Distance(transform.position, target.position);
-       
-        float movement = Vector3.Distance(transform.position, lastPlayerPos);
-      
-        Vector2 mousePos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        float mouseMovement = Vector2.Distance(mousePos, lastMousePos);
 
-        bool shouldUnlock = distance > (viewRange + lockBreakDistance) || movement > lockBreakMovement || mouseMovement >= lockBreakInput;
+        float movement = Vector3.Distance(transform.position, lastPlayerPos);
+
+        bool shouldUnlock = distance > (viewRange + lockBreakDistance) || movement > lockBreakMovement || Mouse.current.delta.ReadValue().magnitude >= lockBreakInput * 0.5f;
+
+        Debug.Log($"{Input.mousePositionDelta.magnitude}");
 
         if (shouldUnlock)
         {
@@ -115,6 +127,7 @@ public class TargetLockOn : MonoBehaviour
         Debug.Log("Unlocking target!");
         target = null;
         lockedOn = false;
+        canLockOn = false;
 
         currentRotation = transform.rotation;
     }
