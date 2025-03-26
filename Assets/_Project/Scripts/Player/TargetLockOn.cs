@@ -29,7 +29,6 @@ public class TargetLockOn : MonoBehaviour
     public float lockBreakMovement;
     public float lockBreakTimer;
     public float lockBreakThreshold;
-    public float lockOnCoolDown;
 
     private Vector3 lastPlayerPos;
     private Vector2 lastMousePos;
@@ -44,25 +43,16 @@ public class TargetLockOn : MonoBehaviour
 
         if (target == null && canLockOn)
         {
+            Debug.Log("Attempting to find a target...");
             if (Physics.SphereCast(ray, lockOnRadius, out hit, viewRange, enemyLayer))
-            {
+            {            
                 target = hit.transform;
                 lockedOn = true;
+                Debug.Log($"Target Locked: {target.name}");
             }
             else
             {
                 Debug.Log("No valid target found.");
-            }
-        }
-
-        if (!canLockOn)
-        {
-            lockOnCoolDown += Time.deltaTime;
-
-            if (lockOnCoolDown >= 0.5f)
-            {
-                canLockOn = true;
-                lockOnCoolDown = 0f;
             }
         }
 
@@ -103,7 +93,7 @@ public class TargetLockOn : MonoBehaviour
 
         bool shouldUnlock = distance > (viewRange + lockBreakDistance) || movement > lockBreakMovement || Mouse.current.delta.ReadValue().magnitude >= lockBreakInput * 0.5f;
 
-        Debug.Log($"{Input.mousePositionDelta.magnitude}");
+        Debug.Log($"Mouse Delta: {Mouse.current.delta.ReadValue().magnitude}");
 
         if (shouldUnlock)
         {
@@ -128,7 +118,14 @@ public class TargetLockOn : MonoBehaviour
         target = null;
         lockedOn = false;
         canLockOn = false;
+        StartCoroutine(ResetLockOn());
 
         currentRotation = transform.rotation;
+    }
+
+    IEnumerator ResetLockOn()
+    {
+        yield return new WaitForSeconds(0.5f);
+        canLockOn = true;
     }
 }
