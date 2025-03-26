@@ -58,16 +58,19 @@ public class TargetLockOn : MonoBehaviour
 
         if (target != null && lockedOn)
         {
-            LockOnToTarget();
-            CheckLockBreak();
-
-            if (target != null)
+            if (target.gameObject == null)
             {
-                distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+                UnlockTarget();
             }
             else
             {
-                distanceToTarget = Mathf.Infinity;
+                LockOnToTarget();
+                CheckLockBreak();
+
+                if(target != null)
+                {
+                    distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+                }            
             }
         }
     }
@@ -79,8 +82,6 @@ public class TargetLockOn : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 5f * Time.deltaTime);
 
         lockOnCam.LookAt = target.transform;
-
-        lastMousePos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
 
     void CheckLockBreak()
@@ -114,6 +115,11 @@ public class TargetLockOn : MonoBehaviour
 
     void UnlockTarget()
     {
+        if (target != null && target.gameObject != null)
+        {
+            Debug.Log($"Previous target: {target.name}");
+        }
+
         Debug.Log("Unlocking target!");
         target = null;
         lockedOn = false;

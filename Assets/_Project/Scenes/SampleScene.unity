@@ -3494,6 +3494,10 @@ PrefabInstance:
       propertyPath: lockOnCam
       value: 
       objectReference: {fileID: 1434968995}
+    - target: {fileID: 804046417094532758, guid: 71623686152634748904894508da9d5f, type: 3}
+      propertyPath: lockBreakInput
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1376833091518552819, guid: 71623686152634748904894508da9d5f, type: 3}
       propertyPath: healthSlider
       value: 
