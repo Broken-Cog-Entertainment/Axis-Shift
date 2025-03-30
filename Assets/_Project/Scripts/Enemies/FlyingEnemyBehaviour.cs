@@ -14,6 +14,11 @@ namespace AS
 
         private bool isRotating = false;
 
+        [SerializeField] private GameObject bombPrefab;
+        [SerializeField] private Transform bombDropPos;
+        [SerializeField] private float bombDropRate;
+        [SerializeField] private int bombDropBurst;
+
         // Start is called before the first frame update
         public override void Start()
         {
@@ -37,6 +42,7 @@ namespace AS
             else
             {
                 CircleState();
+                StartCoroutine(Bombing());
             }
         }
 
@@ -50,6 +56,26 @@ namespace AS
             {
                 Move(currentWaypoint.position);
             }
+        }
+
+        IEnumerator Bombing()
+        {
+            while (true)
+            {
+                for(int i = 0; i < bombDropBurst; i++)
+                {
+                    DropBomb();
+                    yield return new WaitForSeconds(0.3f);
+                }
+
+                yield return new WaitForSeconds(bombDropRate);
+            }
+            
+        }
+
+        void DropBomb()
+        {
+            GameObject bomb = Instantiate(bombPrefab, bombDropPos.position, Quaternion.identity);
         }
 
         void AttackState()
