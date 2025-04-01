@@ -29,7 +29,7 @@ namespace AS
         public float nextFire;
         public float fireVelocity;
         public float angleToShoot;
-        public Transform[] firePos;
+        public Transform firePos;
 
         public float dodgeDistance;
         public float dodgeSpeed;
@@ -147,23 +147,20 @@ namespace AS
 
         public virtual void Shoot()
         {
-            foreach (Transform pos in firePos)
+            for (int i = 0; i < attackBurst; i++)
             {
-                for (int i = 0; i < attackBurst; i++)
+                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("EnemyBulletPool");
+                if (bullet != null)
                 {
-                    GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
-                    if (bullet != null)
-                    {
-                        Debug.Log("Fired projectile!");
-                        bullet.transform.position = firePos[i].position;
-                        bullet.SetActive(true);
-                        bullet.GetComponent<Bullet>().shooter = this.gameObject;
-                        bullet.GetComponent<Bullet>().damageAmount = attackDamage;
-                        bullet.GetComponent<Bullet>().speed = fireVelocity;
+                    Debug.Log("Fired projectile!");
+                    bullet.transform.position = firePos.position;
+                    bullet.SetActive(true);
+                    bullet.GetComponent<Bullet>().shooter = this.gameObject;
+                    bullet.GetComponent<Bullet>().damageAmount = attackDamage;
+                    bullet.GetComponent<Bullet>().speed = fireVelocity;
 
-                        bullet.GetComponent<Bullet>().target = player.position;
-                        //bullet.GetComponent<Bullet>().transform.LookAt(player);
-                    }
+                    bullet.GetComponent<Bullet>().target = player.position;
+                    //bullet.GetComponent<Bullet>().transform.LookAt(player);
                 }
             }
         }

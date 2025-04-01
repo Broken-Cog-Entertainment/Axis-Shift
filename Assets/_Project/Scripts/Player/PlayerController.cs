@@ -272,7 +272,7 @@ namespace AS.Player
                 target = hitInfo.distance < 20f ? hitInfo.point : transform.position + transform.forward * maxRange;
             }
 
-            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("BulletPool");
             if (bullet != null)
             {
                 bullet.transform.position = spawnPoint;

@@ -13,6 +13,9 @@ namespace AS.Weapons
         
         public Vector3 target;
 
+        private string playerBulletPool = "BulletPool";
+        private string enemyBulletPool = "EnemyBulletPool";
+
         private void Update()
         {
             var direction = (target - transform.position).normalized;
@@ -22,11 +25,11 @@ namespace AS.Weapons
 
             if (Vector3.Distance(target, transform.position) < destroyWhenRange)
             {
-                gameObject.SetActive(false);
+                ReturnToPool();
             }
         }
 
-        private void OnCollisionEnter(Collision other)
+        public virtual void OnCollisionEnter(Collision other)
         {
             if (other.gameObject == shooter) return;
             //if (other.gameObject.CompareTag("Water")) return;
@@ -35,17 +38,30 @@ namespace AS.Weapons
             {
                 hit.TakeDamage(damageAmount);
                 Debug.Log("Hit " + other.gameObject.name);
-                gameObject.SetActive(false);
+                ReturnToPool();
             }
 
             else
             {
-                ActivateSwitch activateSwitch = other.gameObject.GetComponent<ActivateSwitch>();
-                if (activateSwitch != null)
+                if(shooter.gameObject.tag == "Player")
                 {
-                    activateSwitch.Activate();
+                    if (other.gameObject.TryGetComponent(out ActivateSwitch switchHit))
+                    {
+                        switchHit.Activate();
+                        ReturnToPool();
+                    }
+                }
+                else
+                {
+                    Debug.Log("Switch was shot by enemy, ignore activation");
                 }
             }
+        }
+
+        void ReturnToPool()
+        {
+            string poolName = shooter.CompareTag("Player") ? playerBulletPool : enemyBulletPool;
+            ObjectPool.SharedInstance.ReturnToPool(poolName, gameObject);
         }
     }
 }

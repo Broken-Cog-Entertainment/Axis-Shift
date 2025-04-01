@@ -21,7 +21,7 @@ public class GameOver : MonoBehaviour
     {
         PlayerHealth health = player.GetComponent<PlayerHealth>();
 
-        if(health.currentHealth <= 0)
+        if(health.currentHealth[0] <= 0)
         {
             gameOver = true;
         }

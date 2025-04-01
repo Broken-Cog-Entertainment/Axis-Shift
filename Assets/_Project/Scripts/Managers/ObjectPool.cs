@@ -8,8 +8,16 @@ namespace AS
     {
         public static ObjectPool SharedInstance;
         public List<GameObject> pooledObjects;
-        public GameObject objectToPool;
+
+        [Header("Objects To Pool")]
+        public GameObject bulletPrefab;
+        public GameObject enemyBulletPrefab;
+        public GameObject bombPrefab;
+        public GameObject homingMissilePrefab;
+
         public int totalAmountToPool;
+
+        private Dictionary<string, Queue<GameObject>> pools = new Dictionary<string, Queue<GameObject>>();
 
         private void Awake()
         {
@@ -19,26 +27,49 @@ namespace AS
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            pooledObjects = new List<GameObject>();
-            GameObject obj;
-            for(int i = 0; i < totalAmountToPool; i++)
+            CreatePool("BulletPool", bulletPrefab, 25);
+            CreatePool("EnemyBulletPool", enemyBulletPrefab, 25);
+            CreatePool("BombPool", bombPrefab, 25);
+            CreatePool("HomingMissilePool", homingMissilePrefab, 10);
+        }
+
+        public void CreatePool(string poolName, GameObject prefab, int initialSize)
+        {
+            if (!pools.ContainsKey(poolName))
             {
-                obj = Instantiate(objectToPool);
-                obj.SetActive(true);
-                pooledObjects.Add(obj);
+                Queue<GameObject> pool = new Queue<GameObject>();
+                for (int i = 0; i < initialSize; i++)
+                {
+                    GameObject obj = Instantiate(prefab);
+                    obj.SetActive(false);
+                    obj.transform.SetParent(this.transform);
+                    pool.Enqueue(obj);
+                }
+                pools.Add(poolName, pool);
             }
         }
 
-        public GameObject GetPooledObject()
+        public GameObject GetPooledObject(string poolName)
         {
-            for(int i = 0; i < totalAmountToPool; i++)
+            if(pools.ContainsKey(poolName) && pools[poolName].Count > 0)
             {
-                if (!pooledObjects[i].activeInHierarchy)
-                {
-                    return pooledObjects[i];
-                }
+                GameObject obj = pools[poolName].Dequeue();
+                obj.SetActive(true);
+                return obj;
             }
-            return null;
+            else
+            {
+                return null;
+            }
+        }
+
+        public void ReturnToPool(string poolName, GameObject obj)
+        {
+            if (pools.ContainsKey(poolName))
+            {
+                obj.SetActive(false);
+                pools[poolName].Enqueue(obj);
+            }
         }
     }
 }

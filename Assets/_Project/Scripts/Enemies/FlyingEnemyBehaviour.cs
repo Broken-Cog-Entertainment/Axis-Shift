@@ -14,11 +14,6 @@ namespace AS
 
         private bool isRotating = false;
 
-        [SerializeField] private GameObject bombPrefab;
-        [SerializeField] private Transform bombDropPos;
-        [SerializeField] private float bombDropRate;
-        [SerializeField] private int bombDropBurst;
-
         // Start is called before the first frame update
         public override void Start()
         {
@@ -37,12 +32,24 @@ namespace AS
 
             if (CanSeePlayer() || DistanceToPlayer() < chaseDistance)
             {
-                AttackState();
+                if (!isRotating)
+                {
+                    StartCoroutine(RotateTowardsTarget(10f));
+                }
+
+               // LookTowards(player.position);
+                //Move();
+
+                if(FaceTarget(10f) && DistanceToPlayer() < attackDistance)
+                {
+                    AttackState();
+                }             
             }
             else
             {
                 CircleState();
-                StartCoroutine(Bombing());
+                LookTowards(currentWaypoint.position);
+                //Move();
             }
         }
 
@@ -54,42 +61,22 @@ namespace AS
             }
             else
             {
-                Move(currentWaypoint.position);
+                Move();
             }
-        }
-
-        IEnumerator Bombing()
-        {
-            while (true)
-            {
-                for(int i = 0; i < bombDropBurst; i++)
-                {
-                    DropBomb();
-                    yield return new WaitForSeconds(0.3f);
-                }
-
-                yield return new WaitForSeconds(bombDropRate);
-            }
-            
-        }
-
-        void DropBomb()
-        {
-            GameObject bomb = Instantiate(bombPrefab, bombDropPos.position, Quaternion.identity);
         }
 
         void AttackState()
         {
             if (!isRotating)
             {
-                StartCoroutine(RotateTowardsTarget(angleToShoot));
+                StartCoroutine(RotateTowardsTarget(10f));
             }
 
             LookTowards(player.position);
 
             if (DistanceToPlayer() > attackDistance)
             {
-                Move(player.position);
+                Move();
             }
             else if (!isStrafing)
             {
@@ -101,14 +88,16 @@ namespace AS
             if (nextFire >= attackRate)
             {
                 nextFire = 0f;
-                Attacking();
+                Shoot();
                 Debug.Log("Shooting at player...");
             }
         }
 
         public override bool CanSeePlayer()
         {
-            return base.CanSeePlayer();
+            bool canSee = base.CanSeePlayer();
+            Debug.Log("CanSeePlayer: " + canSee);
+            return canSee;
         }
 
         public override Vector3 Wander(float radius)
@@ -179,12 +168,13 @@ namespace AS
 
         public override IEnumerator Dodging()
         {
-            if (!canDodge) yield break;
+            if (!canDodge || isStrafing) yield break;
 
+            
             Vector3 randomDodgeDirection = Vector3.Cross(Vector3.up, (player.position - transform.position).normalized);
             if (Random.value > 0.5f) randomDodgeDirection *= -1;
 
-            myRB.AddForce(randomDodgeDirection * dodgeSpeed, ForceMode.VelocityChange);
+            myRB.linearVelocity = randomDodgeDirection * dodgeSpeed;
             yield return new WaitForSeconds(0.2f);
 
             myRB.linearVelocity = Vector3.zero;
@@ -193,14 +183,16 @@ namespace AS
             canDodge = true;
         }
 
-        public void Move(Vector3 targetPos)
+        public void Move()
         {
-            Vector3 dir = targetPos - transform.position;
-            if (dir.sqrMagnitude < 0.01f) return;
+          //  Vector3 dir = targetPos - transform.position;
+         //   if (dir.sqrMagnitude < 0.01f) return;
 
-            dir.Normalize();
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotateSpeed);
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+         //   dir.Normalize();
+          //  transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotateSpeed);
+
+            //Vector3 direction = (targetPos - transform.position).normalized;
+            myRB.linearVelocity = transform.forward * moveSpeed;
         }
 
         private float DistanceToPlayer()
@@ -211,14 +203,15 @@ namespace AS
 
         void LookTowards(Vector3 targetPos)
         {
-            Vector3 targetDirection = targetPos - transform.position;
+            Vector3 targetDirection = (targetPos - transform.position).normalized;
             if (targetDirection.sqrMagnitude < 0.01f) return;
 
-            targetDirection.Normalize();
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetDirection), Time.deltaTime * rotateSpeed);
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
         }
 
-        private bool FaceTarget(float angleThreshold)
+        private bool FaceTarget(float angleThreshold = 15f)
         {
             if (!player) return true;
             Vector3 directionToPlayer = (player.position - transform.position).normalized;
@@ -226,13 +219,17 @@ namespace AS
             return angle <= angleThreshold;
         }
 
-        IEnumerator RotateTowardsTarget(float angleThreshold)
+        IEnumerator RotateTowardsTarget(float angleThreshold = 10f)
         {
             isRotating = true;
 
             while (!FaceTarget(angleThreshold))
             {
-                LookTowards(player.position);
+                Vector3 directionToPlayer = (player.position - transform.position).normalized;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+
                 yield return null;
             }
 
@@ -261,13 +258,10 @@ namespace AS
                 float currentHeight = hit.distance;
                 float desiredHeight = hit.point.y + targetHeight;
 
-                if (currentHeight < targetHeight)
-                {
-                    float heightDifference = targetHeight - currentHeight;
-                    Vector3 correctedPos = transform.position + Vector3.up * heightDifference;
+                float heightDifference = targetHeight - currentHeight;
+                float heightVelocity = heightDifference * heightCorrectionSpeed;
 
-                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, desiredHeight, Time.deltaTime * heightCorrectionSpeed), transform.position.z);
-                }
+                myRB.linearVelocity = new Vector3(myRB.linearVelocity.x, heightVelocity, myRB.linearVelocity.z);
 
             }
         }

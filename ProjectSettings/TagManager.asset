@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - EnemyCanvas
+  - Water
+  - Projectile
   layers:
   - Default
   - TransparentFX
