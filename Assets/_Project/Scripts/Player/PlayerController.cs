@@ -275,11 +275,11 @@ namespace AS.Player
             GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("BulletPool");
             if (bullet != null)
             {
+                bullet.GetComponent<Bullet>().shooter = this.gameObject;
                 bullet.transform.position = spawnPoint;
                 bullet.SetActive(true);
                 bullet.GetComponent<Bullet>().target = target;
                 //bullet.transform.LookAt(target);
-                bullet.GetComponent<Bullet>().shooter = this.gameObject;
             }
 
             _lastFiredTimer = FireDelay;

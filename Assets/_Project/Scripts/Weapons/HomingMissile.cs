@@ -31,7 +31,6 @@ namespace AS.Weapons
         public override void OnCollisionEnter(Collision other)
         {
             if (other.gameObject == shooter) return;
-            //if (other.gameObject.CompareTag("Water")) return;
 
             if (other.gameObject.TryGetComponent(out IDamageable hit))
             {

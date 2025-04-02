@@ -24,9 +24,8 @@ public class Transformation : MonoBehaviour
     [SerializeField] private Vector3 currentPosition;
     [SerializeField] private Quaternion currentRotation;
 
-    public bool canTransformIntoTank;
-    public bool canTransformIntoSpaceship;
-    public bool canTransformIntoSubmarine;
+    public bool spaceshipUnlocked = false;
+    public bool submarineUnlocked = false;
 
     [SerializeField] private bool inWater = false;
 
@@ -64,7 +63,7 @@ public class Transformation : MonoBehaviour
             //weaponHolder.SetActiveWeapon(1);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && spaceshipUnlocked)
         {
             StartCoroutine(TransformVehicle(TransformationType.Spaceship));
             Debug.Log("Transformed into Spaceship.");
@@ -81,7 +80,7 @@ public class Transformation : MonoBehaviour
             //weaponHolder.SetActiveWeapon(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && submarineUnlocked)
         {
             StartCoroutine(TransformVehicle(TransformationType.Submarine));
             Debug.Log("Transformed into Submarine.");
@@ -132,21 +131,21 @@ public class Transformation : MonoBehaviour
 
             case TransformationType.Spaceship:
 
-           //     spaceshipController.enabled = true;
+                //     spaceshipController.enabled = true;
 
-              //  this.GetComponent<RadarPulse>().enabled = false;
-              //  this.GetComponent<HomingMissileLauncher>().enabled = false;
-              //  this.GetComponent<PlayerShoot>().enabled = true;
-
+                //  this.GetComponent<RadarPulse>().enabled = false;
+                //  this.GetComponent<HomingMissileLauncher>().enabled = false;
+                //  this.GetComponent<PlayerShoot>().enabled = true;
+                if (!spaceshipUnlocked) yield break;
                 break;
 
             case TransformationType.Submarine:
 
-            //    submarineController.enabled = true;
-              //  this.GetComponent<RadarPulse>().enabled = true;
-              //  this.GetComponent<HomingMissileLauncher>().enabled = true;
-              //  this.GetComponent<PlayerShoot>().enabled = false;
-
+                //    submarineController.enabled = true;
+                //  this.GetComponent<RadarPulse>().enabled = true;
+                //  this.GetComponent<HomingMissileLauncher>().enabled = true;
+                //  this.GetComponent<PlayerShoot>().enabled = false;
+                if (!submarineUnlocked) yield break;
                 break;
         }
 
@@ -177,5 +176,15 @@ public class Transformation : MonoBehaviour
 
         myRB.linearVelocity = storedVelocity;
         myRB.angularVelocity = storedAngularVelocity;
+    }
+
+    public void UnlockSpaceship()
+    {
+        spaceshipUnlocked = true;
+    }
+
+    public void UnlockSubmarine()
+    {
+        submarineUnlocked = true;
     }
 }

@@ -13,6 +13,7 @@ namespace AS
         public GameObject bulletPrefab;
         public GameObject enemyBulletPrefab;
         public GameObject bombPrefab;
+        public GameObject explosionPrefab;
         public GameObject homingMissilePrefab;
 
         public int totalAmountToPool;
@@ -27,9 +28,10 @@ namespace AS
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            CreatePool("BulletPool", bulletPrefab, 25);
+            CreatePool("BulletPool", bulletPrefab, 50);
             CreatePool("EnemyBulletPool", enemyBulletPrefab, 25);
             CreatePool("BombPool", bombPrefab, 25);
+            CreatePool("ExplosionPool", explosionPrefab, 25);
             CreatePool("HomingMissilePool", homingMissilePrefab, 10);
         }
 
@@ -51,24 +53,49 @@ namespace AS
 
         public GameObject GetPooledObject(string poolName)
         {
-            if(pools.ContainsKey(poolName) && pools[poolName].Count > 0)
+            if (!pools.ContainsKey(poolName))
             {
-                GameObject obj = pools[poolName].Dequeue();
-                obj.SetActive(true);
-                return obj;
+                Debug.LogError($"Pool {poolName} doesn't exist.");
+                return null;
             }
-            else
+            if (pools[poolName].Count == 0)
             {
                 return null;
             }
+            GameObject obj = pools[poolName].Dequeue();
+
+            if(obj == null)
+            {
+                Debug.LogError($"Object is missing from {poolName}, it may have been destroyed.");
+                return null;
+            }
+                obj.SetActive(true);
+                return obj;
         }
 
         public void ReturnToPool(string poolName, GameObject obj)
         {
+            if(obj == null)
+            {
+                Debug.LogWarning($"Attempting to return a null object to {poolName}.");
+            return;
+            }
             if (pools.ContainsKey(poolName))
             {
                 obj.SetActive(false);
-                pools[poolName].Enqueue(obj);
+
+                if (!pools[poolName].Contains(obj))
+                {
+                    pools[poolName].Enqueue(obj);
+                }
+                else
+                {
+                    Debug.LogWarning($"Object {obj.name} is already in the pool {poolName}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Pool {poolName} doesn't exist.");
             }
         }
     }

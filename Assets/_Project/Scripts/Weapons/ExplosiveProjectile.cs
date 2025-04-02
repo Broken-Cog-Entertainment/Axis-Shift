@@ -21,8 +21,17 @@ namespace AS
             if (other.gameObject == shooter) return;
             // if (other.gameObject.tag == "Projectile") return;
 
-            ExplosionDamage();
+            StartCoroutine(ExplosionDuration());
             Debug.Log(other.gameObject.name);
+        }
+        IEnumerator ExplosionDuration()
+        {
+            ExplosionDamage();
+
+            yield return new WaitForSeconds(explosionDuration);
+
+            exploded = false;
+            ObjectPool.SharedInstance.ReturnToPool("BombPool", gameObject);
         }
 
         public void ExplosionDamage()
@@ -32,16 +41,15 @@ namespace AS
             exploded = true;
             explosionPoint = transform.position;
 
-            GetComponent<MeshRenderer>().enabled = false;
-            GetComponent<Collider>().enabled = false;
-            GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-            GetComponent<Rigidbody>().isKinematic = true;
+        //    GetComponent<MeshRenderer>().enabled = false;
+        //    GetComponent<Collider>().enabled = false;
+        //    GetComponent<Rigidbody>().isKinematic = true;
 
             Collider[] targetsHit = Physics.OverlapSphere(explosionPoint, explosionRadius);
 
             foreach (var target in targetsHit)
             {
-                if (target.gameObject == shooter) return;
+                if (target.gameObject == shooter) continue;
 
                 if (target.TryGetComponent(out IDamageable hit))
                 {
@@ -67,11 +75,12 @@ namespace AS
 
         IEnumerator ExplosionEffect()
         {
-            if (explosionEffect != null)
-            {
-                GameObject explosion = Instantiate(explosionEffect, explosionPoint, Quaternion.identity);
-                //explosion.transform.localScale = Vector3.zero;
+            GameObject explosion = ObjectPool.SharedInstance.GetPooledObject("ExplosionPool");
+            explosion.transform.position = this.transform.position;
+            explosion.GetComponent<ParticleSystem>().Play();
 
+            if (explosion != null)
+            {
                 float elapsedTime = 0f;
 
                 while (elapsedTime < explosionDuration)
@@ -79,14 +88,11 @@ namespace AS
                     elapsedTime += Time.deltaTime;
 
                     float currentRadius = Mathf.Lerp(0, explosionRadius, elapsedTime / explosionDuration);
-                    //explosion.transform.localScale = new Vector3(currentRadius * 2, currentRadius * 2, currentRadius * 2);
                     yield return null;
                 }
 
-                //Destroy(explosion, 2f);
-
+                ObjectPool.SharedInstance.ReturnToPool("ExplosionPool", explosion);
             }
-            ObjectPool.SharedInstance.ReturnToPool("BombPool", gameObject);
         }
     }
 }

@@ -60,8 +60,15 @@ namespace AS.Weapons
 
         void ReturnToPool()
         {
-            string poolName = shooter.CompareTag("Player") ? playerBulletPool : enemyBulletPool;
-            ObjectPool.SharedInstance.ReturnToPool(poolName, gameObject);
+            if(shooter == null)
+            {
+                ObjectPool.SharedInstance.ReturnToPool(enemyBulletPool, gameObject);
+            }
+            else
+            {
+                string poolName = shooter.CompareTag("Player") ? playerBulletPool : enemyBulletPool;
+                ObjectPool.SharedInstance.ReturnToPool(poolName, gameObject);
+            }
         }
     }
 }

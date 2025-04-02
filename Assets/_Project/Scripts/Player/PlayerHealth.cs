@@ -13,6 +13,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     [SerializeField] bool[] depleted;
 
     public bool dead;
+    public bool inHealingZone;
 
     public float regenDelay;
     public float regenAmount;
@@ -46,6 +47,30 @@ public class PlayerHealth : MonoBehaviour, IDamageable
                 behaviour.enabled = false;
             }
         }
+
+        if (inHealingZone)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                RestoreHealthBar();
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.tag == "Healing")
+        {
+            inHealingZone = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Healing")
+        {
+            inHealingZone = false;
+        }
     }
 
     public void TakeDamage(float damageAmount)
@@ -71,6 +96,25 @@ public class PlayerHealth : MonoBehaviour, IDamageable
                 return;
             }
         }     
+    }
+
+    public void RestoreHealthBar()
+    {
+        for(int i = 0; i < depleted.Length; i++)
+        {
+            if (!depleted[i])
+            {
+                currentHealth[i] = health;
+                UpdateHealthBar();
+            }
+            if (depleted[i])
+            {
+                depleted[i] = false;
+                currentHealth[i] = health;
+                UpdateHealthBar();
+                return;
+            }
+        }
     }
 
     IEnumerator RegenHealth()

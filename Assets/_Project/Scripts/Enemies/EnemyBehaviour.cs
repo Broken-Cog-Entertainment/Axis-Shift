@@ -153,9 +153,9 @@ namespace AS
                 if (bullet != null)
                 {
                     Debug.Log("Fired projectile!");
+                    bullet.GetComponent<Bullet>().shooter = this.gameObject;
                     bullet.transform.position = firePos.position;
                     bullet.SetActive(true);
-                    bullet.GetComponent<Bullet>().shooter = this.gameObject;
                     bullet.GetComponent<Bullet>().damageAmount = attackDamage;
                     bullet.GetComponent<Bullet>().speed = fireVelocity;
 
