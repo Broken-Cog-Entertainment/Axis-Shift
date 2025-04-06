@@ -3,188 +3,198 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Cinemachine;
 
-public enum TransformationType { Tank, Spaceship, Submarine }
-public class Transformation : MonoBehaviour
+namespace AS.Player
 {
-    // public GameObject tankForm;
-    // public GameObject spaceshipForm;
-    // public GameObject submarineForm;
-
-    public Rigidbody myRB;
-
-   // public TankMovement tankController;
-   // public SpaceshipMovement spaceshipController;
-   // public SubmarineMovement submarineController;
-
-    public TransformationType currentForm;
-
-    [SerializeField] private Vector3 storedVelocity;
-    [SerializeField] private Vector3 storedAngularVelocity;
-
-    [SerializeField] private Vector3 currentPosition;
-    [SerializeField] private Quaternion currentRotation;
-
-    public bool spaceshipUnlocked = false;
-    public bool submarineUnlocked = false;
-
-    [SerializeField] private bool inWater = false;
-
-    [SerializeField] private CinemachineVirtualCamera vCam;
-
-    [SerializeField] private Animator myAnim;
-    public float targetState = 0f;
-    public float transitionTime = 0.5f;
-
-   // [SerializeField] private WeaponHolder weaponHolder;
-
-    void Start()
+    public enum TransformationType { Tank, Spaceship, Submarine }
+    public class Transformation : MonoBehaviour
     {
-        myRB = GetComponent<Rigidbody>();
-        TransformVehicle(TransformationType.Tank);
-    }
+        public GameObject tankForm;
+        public GameObject spaceshipForm;
+        public GameObject submarineForm;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        public Rigidbody myRB;
+
+        public TankController tankController;
+        public PlayerController spaceshipController;
+        // public SubmarineMovement submarineController;
+
+        public TransformationType currentForm;
+
+        [SerializeField] private Vector3 storedVelocity;
+        [SerializeField] private Vector3 storedAngularVelocity;
+
+        [SerializeField] private Vector3 currentPosition;
+        [SerializeField] private Quaternion currentRotation;
+
+        public bool spaceshipUnlocked = false;
+        public bool submarineUnlocked = false;
+
+        [SerializeField] private bool inWater = false;
+
+        [SerializeField] private CinemachineVirtualCamera vCam;
+
+      //  [SerializeField] private Animator myAnim;
+        public float targetState = 0f;
+        public float transitionTime = 0.5f;
+
+        // [SerializeField] private WeaponHolder weaponHolder;
+
+        void Start()
         {
-            StartCoroutine(TransformVehicle(TransformationType.Tank));
-            Debug.Log("Transformed into Tank.");
-            
-            if(currentForm == TransformationType.Spaceship)
-            {
-                myAnim.SetTrigger("SpaceshipToTank");
-            }
-            if (currentForm == TransformationType.Submarine)
-            {
-                myAnim.SetTrigger("SubmarineToTank");
-            }
-
-            //weaponHolder.SetActiveWeapon(1);
+            myRB = GetComponent<Rigidbody>();
+            TransformVehicle(TransformationType.Tank);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && spaceshipUnlocked)
+        // Update is called once per frame
+        void Update()
         {
-            StartCoroutine(TransformVehicle(TransformationType.Spaceship));
-            Debug.Log("Transformed into Spaceship.");
-
-            if(currentForm == TransformationType.Tank)
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                myAnim.SetTrigger("TankToSpaceship");
-            }
-            if (currentForm == TransformationType.Submarine)
-            {
-                myAnim.SetTrigger("SubmarineToSpaceship");
+                StartCoroutine(TransformVehicle(TransformationType.Tank));
+                Debug.Log("Transformed into Tank.");
+
+                if (currentForm == TransformationType.Spaceship)
+                {
+                  //  myAnim.SetTrigger("SpaceshipToTank");
+                }
+                if (currentForm == TransformationType.Submarine)
+                {
+                 //   myAnim.SetTrigger("SubmarineToTank");
+                }
+
+                //weaponHolder.SetActiveWeapon(1);
             }
 
-            //weaponHolder.SetActiveWeapon(2);
+            if (Input.GetKeyDown(KeyCode.Alpha2) && spaceshipUnlocked)
+            {
+                StartCoroutine(TransformVehicle(TransformationType.Spaceship));
+                Debug.Log("Transformed into Spaceship.");
+
+                if (currentForm == TransformationType.Tank)
+                {
+                 //   myAnim.SetTrigger("TankToSpaceship");
+                }
+                if (currentForm == TransformationType.Submarine)
+                {
+                  //  myAnim.SetTrigger("SubmarineToSpaceship");
+                }
+
+                //weaponHolder.SetActiveWeapon(2);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha3) && submarineUnlocked)
+            {
+                StartCoroutine(TransformVehicle(TransformationType.Submarine));
+                Debug.Log("Transformed into Submarine.");
+
+                if (currentForm == TransformationType.Tank)
+                {
+                  //  myAnim.SetTrigger("TankToSubmarine");
+                }
+                if (currentForm == TransformationType.Spaceship)
+                {
+                  //  myAnim.SetTrigger("SpaceshipToSubmarine");
+                }
+
+                //weaponHolder.SetActiveWeapon(3);
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && submarineUnlocked)
+        IEnumerator TransformVehicle(TransformationType newTransform)
         {
-            StartCoroutine(TransformVehicle(TransformationType.Submarine));
-            Debug.Log("Transformed into Submarine.");
-
-            if (currentForm == TransformationType.Tank)
+            if (newTransform == currentForm)
             {
-                myAnim.SetTrigger("TankToSubmarine");
-            }
-            if (currentForm == TransformationType.Spaceship)
-            {
-                myAnim.SetTrigger("SpaceshipToSubmarine");
+                Debug.Log("Already in this vehicle form!");
+                yield return null;
             }
 
-            //weaponHolder.SetActiveWeapon(3);
-        }
-    }
+            yield return new WaitForSeconds(0.4f);
 
-    IEnumerator TransformVehicle(TransformationType newTransform)
-    {
-        if (newTransform == currentForm)
-        {
-            Debug.Log("Already in this vehicle form!");
+            storedVelocity = myRB.linearVelocity;
+            storedAngularVelocity = myRB.angularVelocity;
+
+            tankController.enabled = false;
+            spaceshipController.enabled = false;
+            //   submarineController.enabled = false;
+
+            //tankForm.SetActive(false);
+            //spaceshipForm.SetActive(false);
+         //   submarineForm.SetActive(false);
+
+            switch (newTransform)
+            {
+                case TransformationType.Tank:
+
+                    tankController.enabled = true;
+                    //tankForm.SetActive(true);
+
+                    // this.GetComponent<RadarPulse>().enabled = false;
+                    // this.GetComponent<HomingMissileLauncher>().enabled = false;
+                    // this.GetComponent<PlayerShoot>().enabled = true;
+
+                    myRB.linearDamping = 1;
+
+                    break;
+
+                case TransformationType.Spaceship:
+
+                    spaceshipController.enabled = true;
+                    //spaceshipForm.SetActive(true);
+
+                    //  this.GetComponent<RadarPulse>().enabled = false;
+                    //  this.GetComponent<HomingMissileLauncher>().enabled = false;
+                    //  this.GetComponent<PlayerShoot>().enabled = true;
+                    if (!spaceshipUnlocked) yield break;
+                    break;
+
+                case TransformationType.Submarine:
+
+                    //    submarineController.enabled = true;
+                    //  this.GetComponent<RadarPulse>().enabled = true;
+                    //  this.GetComponent<HomingMissileLauncher>().enabled = true;
+                    //  this.GetComponent<PlayerShoot>().enabled = false;
+                    if (!submarineUnlocked) yield break;
+                    break;
+            }
+
             yield return null;
+
+            myRB.linearVelocity = storedVelocity;
+            myRB.angularVelocity = storedAngularVelocity;
+
+            currentForm = newTransform;
         }
 
-        yield return new WaitForSeconds(0.4f);
-
-        storedVelocity = myRB.linearVelocity;
-        storedAngularVelocity = myRB.angularVelocity;
-
-      //  tankController.enabled = false;
-     //   spaceshipController.enabled = false;
-     //   submarineController.enabled = false;
-
-        switch (newTransform)
+        IEnumerator RestoreVelocity()
         {
-            case TransformationType.Tank:
-               
-           //     tankController.enabled = true;
+            float duration = 0.5f;
+            float timeElapsed = 0f;
 
-               // this.GetComponent<RadarPulse>().enabled = false;
-               // this.GetComponent<HomingMissileLauncher>().enabled = false;
-               // this.GetComponent<PlayerShoot>().enabled = true;
+            Vector3 initialVelocity = myRB.linearVelocity;
+            Vector3 initialAngularVelocity = myRB.angularVelocity;
 
-                myRB.linearDamping = 1;
+            while (timeElapsed < duration)
+            {
+                timeElapsed += Time.deltaTime;
+                float time = timeElapsed / duration;
+                myRB.linearVelocity = Vector3.Lerp(initialVelocity, storedVelocity, time);
+                myRB.angularVelocity = Vector3.Lerp(initialAngularVelocity, storedAngularVelocity, time);
+                yield return null;
+            }
 
-                break;
-
-            case TransformationType.Spaceship:
-
-                //     spaceshipController.enabled = true;
-
-                //  this.GetComponent<RadarPulse>().enabled = false;
-                //  this.GetComponent<HomingMissileLauncher>().enabled = false;
-                //  this.GetComponent<PlayerShoot>().enabled = true;
-                if (!spaceshipUnlocked) yield break;
-                break;
-
-            case TransformationType.Submarine:
-
-                //    submarineController.enabled = true;
-                //  this.GetComponent<RadarPulse>().enabled = true;
-                //  this.GetComponent<HomingMissileLauncher>().enabled = true;
-                //  this.GetComponent<PlayerShoot>().enabled = false;
-                if (!submarineUnlocked) yield break;
-                break;
+            myRB.linearVelocity = storedVelocity;
+            myRB.angularVelocity = storedAngularVelocity;
         }
 
-        yield return null;
-
-        myRB.linearVelocity = storedVelocity;
-        myRB.angularVelocity = storedAngularVelocity;
-
-        currentForm = newTransform;
-    }
-
-    IEnumerator RestoreVelocity()
-    {
-        float duration = 0.5f;
-        float timeElapsed = 0f;
-
-        Vector3 initialVelocity = myRB.linearVelocity;
-        Vector3 initialAngularVelocity = myRB.angularVelocity;
-
-        while(timeElapsed < duration)
+        public void UnlockSpaceship()
         {
-            timeElapsed += Time.deltaTime;
-            float time = timeElapsed / duration;
-            myRB.linearVelocity = Vector3.Lerp(initialVelocity, storedVelocity, time);
-            myRB.angularVelocity = Vector3.Lerp(initialAngularVelocity, storedAngularVelocity, time);
-            yield return null;
+            spaceshipUnlocked = true;
         }
 
-        myRB.linearVelocity = storedVelocity;
-        myRB.angularVelocity = storedAngularVelocity;
-    }
-
-    public void UnlockSpaceship()
-    {
-        spaceshipUnlocked = true;
-    }
-
-    public void UnlockSubmarine()
-    {
-        submarineUnlocked = true;
+        public void UnlockSubmarine()
+        {
+            submarineUnlocked = true;
+        }
     }
 }
+

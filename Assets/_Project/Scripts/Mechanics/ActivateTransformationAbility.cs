@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace AS
+namespace AS.Player
 {
     public class ActivateTransformationAbility : MonoBehaviour
     {

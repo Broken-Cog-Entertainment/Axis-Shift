@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AS
+namespace AS.Weapons
 {
-    public class ExplosiveProjectile : ProjectileDamage
+    public class ExplosiveProjectile : Bullet
     {
         [SerializeField] private GameObject explosionEffect;
         [SerializeField] private Vector3 explosionPoint;
@@ -16,7 +16,7 @@ namespace AS
 
         [SerializeField] private float explosionDuration;
 
-        public override void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             if (other.gameObject == shooter) return;
             // if (other.gameObject.tag == "Projectile") return;
