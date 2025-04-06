@@ -12,6 +12,8 @@ using URP_RND_DATA_EDITOR = UnityEditor.Rendering.Universal.ForwardRendererDataE
 #endif
 #endif
 #endif
+using System;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.Rendering;
 #if SHAPES_URP
@@ -196,8 +198,14 @@ namespace Shapes {
 
 		#endif
 
-		public static List<string> GetCurrentKeywords() => PlayerSettings.GetScriptingDefineSymbolsForGroup( EditorUserBuildSettings.selectedBuildTargetGroup ).Split( ';' ).ToList();
-		static void SetCurrentKeywords( IEnumerable<string> keywords ) => PlayerSettings.SetScriptingDefineSymbolsForGroup( EditorUserBuildSettings.selectedBuildTargetGroup, string.Join( ";", keywords ) );
+		static void SetCurrentKeywords(IEnumerable<string> keywords) => PlayerSettings.SetScriptingDefineSymbols(
+			NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup),
+			string.Join(";", keywords));
+		public static List<string> GetCurrentKeywords() => PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup)).Split( ';' ).ToList();
+		[Obsolete]
+		public static List<string> GetCurrentKeywordsOld() => PlayerSettings.GetScriptingDefineSymbolsForGroup( EditorUserBuildSettings.selectedBuildTargetGroup ).Split( ';' ).ToList();
+		[Obsolete]
+		static void SetCurrentKeywordsOld( IEnumerable<string> keywords ) => PlayerSettings.SetScriptingDefineSymbolsForGroup( EditorUserBuildSettings.selectedBuildTargetGroup, string.Join( ";", keywords ) );
 
 		internal static bool TryGetPreprocessorRP( out RenderPipeline rp ) {
 			List<string> keywords = GetCurrentKeywords();

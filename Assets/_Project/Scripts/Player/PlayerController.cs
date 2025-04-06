@@ -21,14 +21,12 @@ namespace AS.Player
 
         [Header("Ground Lift Force")]
         public float groundLiftCheckDistance;
-
         public float groundLiftMaxForce;
         public LayerMask applyGroundForceLayerMask;
 
         [Header("Rotation Controls")]
         [Range(20, 90)] public float maxBankAngle = 30f;
         [Range(10, 90)] public float maxFreeLookBankAngle = 15f;
-
         [Range(15, 90)] public float minPitchAngle;
         [Range(15, 90)] public float maxPitchAngle;
 
