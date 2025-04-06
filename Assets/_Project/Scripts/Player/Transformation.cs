@@ -31,9 +31,10 @@ namespace AS.Player
 
         [SerializeField] private bool inWater = false;
 
-        [SerializeField] private CinemachineVirtualCamera vCam;
+        [SerializeField] private CinemachineCamera tankCam;
+        [SerializeField] private CinemachineCamera spaceshipCam;
 
-      //  [SerializeField] private Animator myAnim;
+        //  [SerializeField] private Animator myAnim;
         public float targetState = 0f;
         public float transitionTime = 0.5f;
 
@@ -115,10 +116,13 @@ namespace AS.Player
 
             tankController.enabled = false;
             spaceshipController.enabled = false;
+
+            tankCam.gameObject.SetActive(false);
+            spaceshipCam.gameObject.SetActive(false);
             //   submarineController.enabled = false;
 
-            //tankForm.SetActive(false);
-            //spaceshipForm.SetActive(false);
+            tankForm.SetActive(false);
+            spaceshipForm.SetActive(false);
          //   submarineForm.SetActive(false);
 
             switch (newTransform)
@@ -126,7 +130,8 @@ namespace AS.Player
                 case TransformationType.Tank:
 
                     tankController.enabled = true;
-                    //tankForm.SetActive(true);
+                    tankCam.gameObject.SetActive(true);
+                    tankForm.SetActive(true);
 
                     // this.GetComponent<RadarPulse>().enabled = false;
                     // this.GetComponent<HomingMissileLauncher>().enabled = false;
@@ -139,7 +144,8 @@ namespace AS.Player
                 case TransformationType.Spaceship:
 
                     spaceshipController.enabled = true;
-                    //spaceshipForm.SetActive(true);
+                    spaceshipCam.gameObject.SetActive(true);
+                    spaceshipForm.SetActive(true);
 
                     //  this.GetComponent<RadarPulse>().enabled = false;
                     //  this.GetComponent<HomingMissileLauncher>().enabled = false;

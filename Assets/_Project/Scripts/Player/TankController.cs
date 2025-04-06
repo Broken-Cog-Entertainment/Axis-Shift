@@ -11,28 +11,11 @@ namespace AS.Player
     public class TankController : MonoBehaviour
     {
         [Header("Movement Settings")]
-        public AnimationCurve thrustByVelocityDot;
-        public AnimationCurve manualThrustControl;
-        public AnimationCurve aimingThrustControl;
         public float maxThrust = 10f;
         public float maxSpeed = 20f;
         public float acceleration;
         public float turnSpeed;
         public float currentSpeed;
-        public float minDistanceToEnemy = 20f;
-
-        [Header("Ground Lift Force")]
-        public float groundLiftCheckDistance;
-
-        public float groundLiftMaxForce;
-        public LayerMask applyGroundForceLayerMask;
-
-        [Header("Rotation Controls")]
-        [Range(20, 90)] public float maxBankAngle = 30f;
-        [Range(10, 90)] public float maxFreeLookBankAngle = 15f;
-
-        [Range(15, 90)] public float minPitchAngle;
-        [Range(15, 90)] public float maxPitchAngle;
 
         [Header("Weapon Controls")]
         public Image hudReticle;
@@ -59,6 +42,9 @@ namespace AS.Player
         public Transform firePos;
 
         public float manualRoll;
+
+        public float groundDistance = 10f;
+        public LayerMask groundMask;
 
        // public ThreeAxisControl control;
         private AnimationCurve _activeThrustControl;
@@ -97,7 +83,7 @@ namespace AS.Player
             //_rb.freezeRotation = true;
 
             hudReticle.gameObject.SetActive(false);
-            _activeThrustControl = manualThrustControl;
+            //_activeThrustControl = manualThrustControl;
         }
 
         private void Update()
@@ -165,6 +151,16 @@ namespace AS.Player
                 Quaternion turnRotation = Quaternion.Euler(0f, turnAmount, 0f);
                 _rb.MoveRotation(_rb.rotation * turnRotation);
             }
+
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, -transform.up, out hit, 1.5f + 1f))
+            {
+                Quaternion groundRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+                transform.rotation = Quaternion.Lerp(transform.rotation, groundRotation, Time.deltaTime * 5f);
+            }
+
+            //_rb.freezeRotation = true;
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -185,7 +181,7 @@ namespace AS.Player
             // if (isAiming == _isAiming) return;
             var isAiming = !_isAiming;
 
-            _activeThrustControl = isAiming ? aimingThrustControl : manualThrustControl;
+            //_activeThrustControl = isAiming ? aimingThrustControl : manualThrustControl;
 
             hudReticle.gameObject.SetActive(isAiming);
             freeLookCamera.gameObject.SetActive(!isAiming);
@@ -213,27 +209,32 @@ namespace AS.Player
 
             if (_lastFiredTimer > 0) return;
 
-            var spawnOffset = gunOffset.With(_lastUsedGunLeft ? gunOffset.x : -gunOffset.x);
-            var spawnPoint = transform.TransformPoint(firePos.position);
+            Vector3 spawnPoint = firePos.position;
 
             var ray = _isAiming
                 ? _mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0))
-                : new Ray(transform.position, transform.forward);
+                : new Ray(turretTransform.transform.position, turretTransform.transform.forward);
 
-            var target = transform.position + ray.direction * maxRange;
+            var target = turretTransform.transform.position + ray.direction * maxRange;
 
             if (Physics.Raycast(ray, out var hitInfo, maxRange, -1, QueryTriggerInteraction.Ignore))
             {
-                target = hitInfo.distance < 20f ? hitInfo.point : transform.position + transform.forward * maxRange;
+                target = hitInfo.distance < 20f ? hitInfo.point : firePos.transform.position + firePos.transform.forward * maxRange;
             }
 
-            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("BulletPool");
+            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("BombPool");
             if (bullet != null)
             {
-                bullet.GetComponent<Bullet>().shooter = this.gameObject;
+                var direction = (target - spawnPoint).normalized;
                 bullet.transform.position = spawnPoint;
+              //bullet.transform.rotation = Quaternion.LookRotation(direction);
+
+                bullet.GetComponent<ExplosiveProjectile>().shooter = this.gameObject;
                 bullet.SetActive(true);
-                bullet.GetComponent<Bullet>().target = target;
+
+                var rb = bullet.GetComponent<Rigidbody>();
+                rb.linearVelocity = Vector3.zero;
+                bullet.GetComponent<Rigidbody>().AddForce(direction * 10, ForceMode.Impulse);
                // Debug.Log("Tank fired bullet!");
             }
 
@@ -245,6 +246,12 @@ namespace AS.Player
         private void UpdateTimers(float deltaTime)
         {
             _lastFiredTimer -= deltaTime;
+        }
+
+        void Stabilize()
+        {
+            Vector3 rightingTorque = Vector3.Cross(transform.up, Vector3.up) * 1000f;
+            _rb.AddTorque(rightingTorque);
         }
     }
 }

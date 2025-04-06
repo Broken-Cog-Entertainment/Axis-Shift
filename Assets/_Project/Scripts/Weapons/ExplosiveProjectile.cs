@@ -16,6 +16,7 @@ namespace AS.Weapons
 
         [SerializeField] private float explosionDuration;
 
+
         public void OnTriggerEnter(Collider other)
         {
             if (other.gameObject == shooter) return;

@@ -82,7 +82,7 @@ namespace AS.Player
             _mainCamera = Camera.main;
             _rb.freezeRotation = true;
 
-            hudReticle.gameObject.SetActive(false);
+            hudReticle.gameObject.SetActive(true);
             _activeThrustControl = manualThrustControl;
         }
 
