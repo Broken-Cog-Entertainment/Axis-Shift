@@ -37,7 +37,7 @@ namespace AS
             UpdateHealthBar();
             currentHealthBarVisibleTime = maxHealthBarVisibleTime;
 
-            this.GetComponent<EnemyBehaviour>().alerted = true;
+            //this.GetComponent<EnemyBehaviour>().alerted = true;
         }
 
         private void Update()

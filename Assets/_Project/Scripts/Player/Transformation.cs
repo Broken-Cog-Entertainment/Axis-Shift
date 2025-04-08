@@ -16,7 +16,7 @@ namespace AS.Player
 
         public TankController tankController;
         public PlayerController spaceshipController;
-        // public SubmarineMovement submarineController;
+        public SubmarineController submarineController;
 
         public TransformationType currentForm;
 
@@ -40,10 +40,10 @@ namespace AS.Player
 
         // [SerializeField] private WeaponHolder weaponHolder;
 
-        void Start()
+        void Awake()
         {
             myRB = GetComponent<Rigidbody>();
-            TransformVehicle(TransformationType.Tank);
+            StartCoroutine(TransformVehicle(TransformationType.Tank));
         }
 
         // Update is called once per frame
@@ -103,35 +103,37 @@ namespace AS.Player
 
         IEnumerator TransformVehicle(TransformationType newTransform)
         {
-            if (newTransform == currentForm)
-            {
-                Debug.Log("Already in this vehicle form!");
-                yield return null;
-            }
+           // if (newTransform == currentForm)
+          //  {
+          //      Debug.Log("Already in this vehicle form!");
+         //       yield break;
+          //  }
 
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForEndOfFrame();
 
-            storedVelocity = myRB.linearVelocity;
-            storedAngularVelocity = myRB.angularVelocity;
+           // storedVelocity = myRB.linearVelocity;
+          //  storedAngularVelocity = myRB.angularVelocity;
 
             tankController.enabled = false;
             spaceshipController.enabled = false;
+            submarineController.enabled = false;
 
             tankCam.gameObject.SetActive(false);
             spaceshipCam.gameObject.SetActive(false);
-            //   submarineController.enabled = false;
 
             tankForm.SetActive(false);
             spaceshipForm.SetActive(false);
-         //   submarineForm.SetActive(false);
+            submarineForm.SetActive(false);
 
             switch (newTransform)
             {
                 case TransformationType.Tank:
 
+                    tankForm.SetActive(true);
+
                     tankController.enabled = true;
                     tankCam.gameObject.SetActive(true);
-                    tankForm.SetActive(true);
+                    
 
                     // this.GetComponent<RadarPulse>().enabled = false;
                     // this.GetComponent<HomingMissileLauncher>().enabled = false;
@@ -143,53 +145,40 @@ namespace AS.Player
 
                 case TransformationType.Spaceship:
 
+                    if (!spaceshipUnlocked) yield break;
+
                     spaceshipController.enabled = true;
                     spaceshipCam.gameObject.SetActive(true);
                     spaceshipForm.SetActive(true);
 
+                    Debug.Log("Enabling spaceship controller.");
+
                     //  this.GetComponent<RadarPulse>().enabled = false;
                     //  this.GetComponent<HomingMissileLauncher>().enabled = false;
                     //  this.GetComponent<PlayerShoot>().enabled = true;
-                    if (!spaceshipUnlocked) yield break;
+               
                     break;
 
                 case TransformationType.Submarine:
 
-                    //    submarineController.enabled = true;
+                    if (!submarineUnlocked) yield break;
+
+                    submarineController.enabled = true;
+                    spaceshipCam.gameObject.SetActive(true);
+                    submarineForm.SetActive(true);
                     //  this.GetComponent<RadarPulse>().enabled = true;
                     //  this.GetComponent<HomingMissileLauncher>().enabled = true;
                     //  this.GetComponent<PlayerShoot>().enabled = false;
-                    if (!submarineUnlocked) yield break;
+                    
                     break;
             }
 
             yield return null;
 
-            myRB.linearVelocity = storedVelocity;
-            myRB.angularVelocity = storedAngularVelocity;
+         //   myRB.linearVelocity = storedVelocity;
+        //    myRB.angularVelocity = storedAngularVelocity;
 
             currentForm = newTransform;
-        }
-
-        IEnumerator RestoreVelocity()
-        {
-            float duration = 0.5f;
-            float timeElapsed = 0f;
-
-            Vector3 initialVelocity = myRB.linearVelocity;
-            Vector3 initialAngularVelocity = myRB.angularVelocity;
-
-            while (timeElapsed < duration)
-            {
-                timeElapsed += Time.deltaTime;
-                float time = timeElapsed / duration;
-                myRB.linearVelocity = Vector3.Lerp(initialVelocity, storedVelocity, time);
-                myRB.angularVelocity = Vector3.Lerp(initialAngularVelocity, storedAngularVelocity, time);
-                yield return null;
-            }
-
-            myRB.linearVelocity = storedVelocity;
-            myRB.angularVelocity = storedAngularVelocity;
         }
 
         public void UnlockSpaceship()

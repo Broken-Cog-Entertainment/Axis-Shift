@@ -150,8 +150,8 @@ GameObject:
   - component: {fileID: 7145759809189516198}
   - component: {fileID: 6161386355591038595}
   - component: {fileID: 5610192782200856226}
-  - component: {fileID: 6409249924093159962}
   - component: {fileID: 4345050353086308003}
+  - component: {fileID: 1805496526873534597}
   m_Layer: 7
   m_Name: TurretEnemy
   m_TagString: Enemy
@@ -220,27 +220,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!65 &6409249924093159962
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5811903048627316136}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.5, y: 1.5, z: 1.5}
-  m_Center: {x: 0, y: 0.18, z: 0}
 --- !u!114 &4345050353086308003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,9 +232,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06db34f072c6c0d4e937248a6f5c96e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewDistance: 50
+  viewDistance: 20
   fieldOfViewAngle: 120
-  sightTransform: {fileID: 0}
+  sightTransform: {fileID: 953689877675096655}
   searchTimer: 0
   chaseDistance: 0
   attackDistance: 40
@@ -273,8 +252,7 @@ MonoBehaviour:
   nextFire: 0
   fireVelocity: 25
   angleToShoot: 0
-  firePos:
-  - {fileID: 6519010790541172440}
+  firePos: {fileID: 6519010790541172440}
   dodgeDistance: 0
   dodgeSpeed: 0
   dodgeCooldown: 0
@@ -301,6 +279,27 @@ MonoBehaviour:
   currentWaypoint: {fileID: 0}
   waypoints: []
   laserTarget: {fileID: 6625626671892930398}
+--- !u!135 &1805496526873534597
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5811903048627316136}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8865285319354991222
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,6 +406,11 @@ PrefabInstance:
 --- !u!4 &946754263262903031 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4857788719136574, guid: d82522db9ccce854eba00b1a281d7ec9, type: 3}
+  m_PrefabInstance: {fileID: 951044428487738825}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &953689877675096655 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4193788555034502, guid: d82522db9ccce854eba00b1a281d7ec9, type: 3}
   m_PrefabInstance: {fileID: 951044428487738825}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &954107130549970973 stripped

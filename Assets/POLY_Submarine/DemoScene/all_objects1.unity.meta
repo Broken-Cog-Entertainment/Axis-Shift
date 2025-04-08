@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7bb53f1d54877714cb359a93844e1a1d
+timeCreated: 1532914457
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232763
+  packageName: POLY Submarine
+  packageVersion: 1.0
+  assetPath: Assets/POLY_Submarine/DemoScene/all_objects1.unity
+  uploadId: 525856

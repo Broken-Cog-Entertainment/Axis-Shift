@@ -153,14 +153,21 @@ namespace AS.Player
             }
 
             RaycastHit hit;
+            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
 
-            if (Physics.Raycast(transform.position, -transform.up, out hit, 1.5f + 1f))
+            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 2f))
             {
-                Quaternion groundRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-                transform.rotation = Quaternion.Lerp(transform.rotation, groundRotation, Time.deltaTime * 5f);
+                Vector3 surfaceNormal = hit.normal;
+                Vector3 forwardProjected = Vector3.ProjectOnPlane(transform.forward, surfaceNormal).normalized;
+                Quaternion slerpRotation = Quaternion.LookRotation(forwardProjected, surfaceNormal);
+                Quaternion blendRotation = Quaternion.Slerp(_rb.rotation, slerpRotation, Time.fixedDeltaTime * 5f);
+                _rb.MoveRotation(blendRotation);
             }
 
-            //_rb.freezeRotation = true;
+            if(_rb.linearVelocity.magnitude > maxSpeed)
+            {
+                _rb.linearVelocity = _rb.linearVelocity.normalized * maxSpeed;
+            }
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -211,15 +218,17 @@ namespace AS.Player
 
             Vector3 spawnPoint = firePos.position;
 
-            var ray = _isAiming
-                ? _mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0))
-                : new Ray(turretTransform.transform.position, turretTransform.transform.forward);
+            var ray = new Ray(firePos.position, firePos.forward);
 
-            var target = turretTransform.transform.position + ray.direction * maxRange;
+            Debug.DrawRay(ray.origin, ray.direction, Color.red, 5f);
+
+            var target = firePos.position + ray.direction * maxRange;
+
+            Debug.DrawRay(firePos.position, firePos.position + ray.direction * maxRange, Color.green, 5f);
 
             if (Physics.Raycast(ray, out var hitInfo, maxRange, -1, QueryTriggerInteraction.Ignore))
             {
-                target = hitInfo.distance < 20f ? hitInfo.point : firePos.transform.position + firePos.transform.forward * maxRange;
+                target = hitInfo.distance < 20f ? hitInfo.point : firePos.position + firePos.forward * maxRange;
             }
 
             GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("BombPool");
@@ -227,14 +236,15 @@ namespace AS.Player
             {
                 var direction = (target - spawnPoint).normalized;
                 bullet.transform.position = spawnPoint;
-              //bullet.transform.rotation = Quaternion.LookRotation(direction);
+                Vector3 targetDir = (target - spawnPoint).normalized;
+                bullet.transform.rotation = Quaternion.LookRotation(targetDir);
 
                 bullet.GetComponent<ExplosiveProjectile>().shooter = this.gameObject;
                 bullet.SetActive(true);
 
                 var rb = bullet.GetComponent<Rigidbody>();
-                rb.linearVelocity = Vector3.zero;
-                bullet.GetComponent<Rigidbody>().AddForce(direction * 10, ForceMode.Impulse);
+                //rb.linearVelocity = Vector3.zero;
+                bullet.GetComponent<Rigidbody>().linearVelocity = targetDir * 10f;
                // Debug.Log("Tank fired bullet!");
             }
 
