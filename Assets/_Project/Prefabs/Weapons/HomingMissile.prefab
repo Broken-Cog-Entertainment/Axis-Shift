@@ -48,14 +48,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  launchPos: {fileID: 0}
   speed: 25
-  rotateSpeed: 25
-  homingRange: 25
+  rotateSpeed: 50
+  homingRange: 5
   missileLifetime: 5
   damageAmount: 50
+  foundTarget: 0
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 896
 --- !u!54 &4223624053132686130
 Rigidbody:
   m_ObjectHideFlags: 0

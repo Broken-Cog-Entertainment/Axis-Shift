@@ -12,6 +12,8 @@ namespace AS.Player
         public float drainRate;
         public bool drained = false;
 
+        public Camera mainCamera;
+        public Image waterFilter;
         public GameObject waterObj;
         public Slider waterThresholdSlider;
 
@@ -33,6 +35,25 @@ namespace AS.Player
             }
         }
 
+        private void Update()
+        {
+            if(waterObj != null && inWater)
+            {
+                if (mainCamera.transform.position.y < waterObj.GetComponent<Collider>().bounds.size.y)
+                {
+                    waterFilter.gameObject.SetActive(true);
+                }
+                if (mainCamera.transform.position.y > waterObj.GetComponent<Collider>().bounds.size.y)
+                {
+                    waterFilter.gameObject.SetActive(false);
+                }
+            }
+
+            if (!inWater)
+            {
+                waterFilter.gameObject.SetActive(false);
+            }
+        }
         public void DrainWaterThreshold()
         {
             drainRate = waterThresholdSlider.maxValue / thresholdTime;

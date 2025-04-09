@@ -28,4 +28,15 @@ public class ExplodingMine : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+    private void Update()
+    {
+        {
+            if(this.gameObject == null)
+            {
+                GameObject particle = Instantiate(explosionParticle, this.transform.position, Quaternion.identity) as GameObject;
+                particle.GetComponent<ParticleSystem>().Play();
+            }
+        }
+    }
 }

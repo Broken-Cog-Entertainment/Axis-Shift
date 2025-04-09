@@ -29,7 +29,7 @@ namespace AS.Weapons
             }
         }
 
-        public virtual void OnCollisionEnter(Collision other)
+        public virtual void OnTriggerEnter(Collider other)
         {
             if (other.gameObject == shooter) return;
             //if (other.gameObject.CompareTag("Water")) return;

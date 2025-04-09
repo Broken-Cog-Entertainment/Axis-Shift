@@ -86,6 +86,13 @@ namespace AS.Player
             _activeThrustControl = manualThrustControl;
         }
 
+        private void OnEnable()
+        {
+            yaw = transform.eulerAngles.y;
+            pitch = transform.eulerAngles.x;
+            roll = transform.eulerAngles.z;
+        }
+
         private void Update()
         {
             UpdateTimers(Time.deltaTime);
@@ -130,7 +137,7 @@ namespace AS.Player
                 pitch -= _pitchYawDelta.y * Time.deltaTime * 90f;
                 pitch = Mathf.Clamp(pitch, -minPitchAngle, maxPitchAngle);
 
-                yaw += _pitchYawDelta.x * Time.deltaTime * 90f * 0.6f;
+                yaw += _pitchYawDelta.x * Time.deltaTime * 90f * 1.2f;
 
                 roll *= Mathf.Lerp(0.95f, 0.99f, Mathf.Abs(_pitchYawDelta.x));
                 if (manualRollControl == 0) {

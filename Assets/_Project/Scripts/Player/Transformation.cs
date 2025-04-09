@@ -103,11 +103,14 @@ namespace AS.Player
 
         IEnumerator TransformVehicle(TransformationType newTransform)
         {
-           // if (newTransform == currentForm)
-          //  {
-          //      Debug.Log("Already in this vehicle form!");
-         //       yield break;
-          //  }
+            // if (newTransform == currentForm)
+            //  {
+            //      Debug.Log("Already in this vehicle form!");
+            //       yield break;
+            //  }
+
+            currentPosition = transform.position;
+            currentRotation = transform.rotation;
 
             yield return new WaitForEndOfFrame();
 
@@ -120,6 +123,7 @@ namespace AS.Player
 
             tankCam.gameObject.SetActive(false);
             spaceshipCam.gameObject.SetActive(false);
+            var brain = Camera.main.GetComponent<CinemachineBrain>();
 
             tankForm.SetActive(false);
             spaceshipForm.SetActive(false);
@@ -133,7 +137,8 @@ namespace AS.Player
 
                     tankController.enabled = true;
                     tankCam.gameObject.SetActive(true);
-                    
+                    brain.UpdateMethod = CinemachineBrain.UpdateMethods.FixedUpdate;
+
 
                     // this.GetComponent<RadarPulse>().enabled = false;
                     // this.GetComponent<HomingMissileLauncher>().enabled = false;
@@ -149,6 +154,7 @@ namespace AS.Player
 
                     spaceshipController.enabled = true;
                     spaceshipCam.gameObject.SetActive(true);
+                    brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
                     spaceshipForm.SetActive(true);
 
                     Debug.Log("Enabling spaceship controller.");
@@ -165,6 +171,7 @@ namespace AS.Player
 
                     submarineController.enabled = true;
                     spaceshipCam.gameObject.SetActive(true);
+                    brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
                     submarineForm.SetActive(true);
                     //  this.GetComponent<RadarPulse>().enabled = true;
                     //  this.GetComponent<HomingMissileLauncher>().enabled = true;
@@ -175,8 +182,8 @@ namespace AS.Player
 
             yield return null;
 
-         //   myRB.linearVelocity = storedVelocity;
-        //    myRB.angularVelocity = storedAngularVelocity;
+            transform.position = currentPosition;
+            transform.rotation = currentRotation;
 
             currentForm = newTransform;
         }

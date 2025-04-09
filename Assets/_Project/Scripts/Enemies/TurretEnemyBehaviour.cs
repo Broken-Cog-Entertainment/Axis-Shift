@@ -30,18 +30,18 @@ namespace AS
 
                 Vector3 startPos = sightTransform.position;
                 Vector3 aimDirection = (player.position - startPos).normalized;
-                RaycastHit hit;
+              //  RaycastHit hit;
 
-                if(Physics.Raycast(startPos, aimDirection, out hit, viewDistance, whatIsPlayer))
-                {
-                    laserTarget.SetPosition(0, startPos);
-                    laserTarget.SetPosition(1, hit.point);
-                }
-                else
-                {
-                    laserTarget.SetPosition(0, startPos);
-                    laserTarget.SetPosition(1, player.position);
-                }
+             //   if(Physics.Raycast(startPos, aimDirection, out hit, viewDistance, whatIsPlayer))
+            //    {
+             //       laserTarget.SetPosition(0, startPos);
+             //       laserTarget.SetPosition(1, hit.point);
+             //   }
+             //   else
+              //  {
+               //     laserTarget.SetPosition(0, startPos);
+               //     laserTarget.SetPosition(1, player.position);
+               // }
                 sightTransform.LookAt(player);
 
                 Attacking();

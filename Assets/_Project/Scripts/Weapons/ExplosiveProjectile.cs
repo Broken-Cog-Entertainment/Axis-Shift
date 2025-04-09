@@ -20,10 +20,12 @@ namespace AS.Weapons
         public void OnTriggerEnter(Collider other)
         {
             if (other.gameObject == shooter) return;
+
             // if (other.gameObject.tag == "Projectile") return;
 
             StartCoroutine(ExplosionDuration());
             Debug.Log(other.gameObject.name);
+
         }
         IEnumerator ExplosionDuration()
         {
@@ -33,7 +35,7 @@ namespace AS.Weapons
 
             exploded = false;
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-            ObjectPool.SharedInstance.ReturnToPool("BombPool", gameObject);
+           // ObjectPool.SharedInstance.ReturnToPool("BombPool", gameObject);
         }
 
         public void ExplosionDamage()
@@ -77,11 +79,11 @@ namespace AS.Weapons
 
         IEnumerator ExplosionEffect()
         {
-            GameObject explosion = ObjectPool.SharedInstance.GetPooledObject("ExplosionPool");
-            explosion.transform.position = this.transform.position;
-            explosion.GetComponent<ParticleSystem>().Play();
+            //GameObject explosion = ObjectPool.SharedInstance.GetPooledObject("ExplosionPool");
+            GameObject effect = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            effect.GetComponent<ParticleSystem>().Play();
 
-            if (explosion != null)
+            if (effect != null)
             {
                 float elapsedTime = 0f;
 
@@ -92,8 +94,8 @@ namespace AS.Weapons
                     float currentRadius = Mathf.Lerp(0, explosionRadius, elapsedTime / explosionDuration);
                     yield return null;
                 }
-
-                ObjectPool.SharedInstance.ReturnToPool("ExplosionPool", explosion);
+                Destroy(effect);
+               // ObjectPool.SharedInstance.ReturnToPool("ExplosionPool", explosion);
             }
         }
     }

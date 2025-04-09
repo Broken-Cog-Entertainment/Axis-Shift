@@ -1,6 +1,7 @@
 using AS.Utils;
 using AS.Utils.MathUtils;
 using AS.Weapons;
+using JetBrains.Annotations;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -66,6 +67,7 @@ namespace AS.Player
         private Rigidbody _rb;
 
         public EnterWater waterCheck;
+        public Transform firePos;
 
         private float FireDelay => 1f / fireRate;
 
@@ -75,6 +77,13 @@ namespace AS.Player
         private void Awake()
         {
             _rb = GetComponent<Rigidbody>();
+        }
+
+        private void OnEnable()
+        {
+            yaw = transform.eulerAngles.y;
+            pitch = transform.eulerAngles.x;
+            roll = transform.eulerAngles.z;
         }
 
         private void Start()
@@ -130,10 +139,10 @@ namespace AS.Player
             {
                 _pitchYawDelta = Vector2.Lerp(_pitchYawDelta, _rawPitchYawDelta, Time.deltaTime * 10f);
 
-                pitch -= _pitchYawDelta.y * Time.deltaTime * 60f;
+                pitch -= _pitchYawDelta.y * Time.deltaTime * 90f;
                 pitch = Mathf.Clamp(pitch, -minPitchAngle, maxPitchAngle);
 
-                yaw += _pitchYawDelta.x * Time.deltaTime * 60f * 0.8f;
+                yaw += _pitchYawDelta.x * Time.deltaTime * 90f * 1.2f;
 
                 roll *= Mathf.Lerp(0.95f, 0.99f, Mathf.Abs(_pitchYawDelta.x));
                 if (manualRollControl == 0)
@@ -161,9 +170,12 @@ namespace AS.Player
         {
             if (!waterCheck.inWater)
             {
-                Debug.Log("In water!");
+                Debug.Log("Not in water!");
+
                 return;
             }
+
+            _rb.freezeRotation = true;
 
             var manualThrust = _activeThrustControl.Evaluate(Input.GetAxis("Vertical"));
 
@@ -280,7 +292,8 @@ namespace AS.Player
                 target = hitInfo.distance < 20f ? hitInfo.point : transform.position + transform.forward * maxRange;
             }
 
-            GameObject bomb = Instantiate(bombPrefab, spawnPoint, Quaternion.identity);
+            GameObject bomb = Instantiate(bombPrefab, firePos.position, firePos.rotation);
+             bomb.GetComponent<HomingMissile>().launchPos = firePos;
 
             _lastFiredTimer = FireDelay;
 

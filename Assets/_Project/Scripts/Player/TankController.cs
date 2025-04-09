@@ -96,7 +96,7 @@ namespace AS.Player
                 lookInput.y = Input.GetAxis("Mouse Y") * 2f;
 
                 pitch -= lookInput.y;
-                pitch = Mathf.Clamp(pitch, -40f, 75f);
+                pitch = Mathf.Clamp(pitch, -40f, 20f);
 
                 yaw += lookInput.x;
 
@@ -142,7 +142,7 @@ namespace AS.Player
 
             // Move
             Vector3 move = transform.forward * currentSpeed * Time.fixedDeltaTime;
-            _rb.MovePosition(_rb.position + move);
+            _rb.MovePosition(_rb.position + transform.forward * currentSpeed * Time.fixedDeltaTime);
 
             // Rotate tank body
             if (Mathf.Abs(turnInput) > 0.01f)
@@ -243,7 +243,7 @@ namespace AS.Player
             {
                 bomb.GetComponent<ExplosiveProjectile>().shooter = this.gameObject;
                 bomb.GetComponent<ExplosiveProjectile>().target = target;
-                //bullet.transform.LookAt(target);
+                bomb.GetComponent<Rigidbody>().AddForce(transform.forward * 25f);
             }
 
             _lastFiredTimer = FireDelay;
