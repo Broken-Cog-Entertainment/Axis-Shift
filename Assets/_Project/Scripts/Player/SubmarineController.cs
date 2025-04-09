@@ -36,7 +36,7 @@ namespace AS.Player
         public bool shootOnlyWhileAiming = true;
         public float maxRange;
         public Vector3 gunOffset;
-        public Bullet bulletPrefab;
+        public GameObject bombPrefab;
         public float fireRate;
 
         [Header("Cameras")]
@@ -280,15 +280,7 @@ namespace AS.Player
                 target = hitInfo.distance < 20f ? hitInfo.point : transform.position + transform.forward * maxRange;
             }
 
-            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("BulletPool");
-            if (bullet != null)
-            {
-                bullet.GetComponent<Bullet>().shooter = this.gameObject;
-                bullet.transform.position = spawnPoint;
-                bullet.SetActive(true);
-                bullet.GetComponent<Bullet>().target = target;
-                //bullet.transform.LookAt(target);
-            }
+            GameObject bomb = Instantiate(bombPrefab, spawnPoint, Quaternion.identity);
 
             _lastFiredTimer = FireDelay;
 

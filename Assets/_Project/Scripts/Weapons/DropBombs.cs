@@ -35,14 +35,8 @@ namespace AS
 
         void DropBomb()
         {
-            GameObject bomb = ObjectPool.SharedInstance.GetPooledObject("BombPool");
-            if (bomb != null)
-            {
-                Debug.Log("Dropped bomb!");
-                bomb.transform.position = bombDropPos.position;
-                bomb.SetActive(true);
-                bomb.GetComponent<ExplosiveProjectile>().shooter = this.gameObject;
-            }
+            GameObject bomb = Instantiate(bombPrefab, bombDropPos.position, Quaternion.identity);
+            bomb.GetComponent<ExplosiveProjectile>().shooter = this.gameObject;
         }
     }
 }

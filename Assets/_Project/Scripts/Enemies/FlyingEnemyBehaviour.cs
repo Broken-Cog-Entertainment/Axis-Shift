@@ -89,14 +89,12 @@ namespace AS
             {
                 nextFire = 0f;
                 Shoot();
-                Debug.Log("Shooting at player...");
             }
         }
 
         public override bool CanSeePlayer()
         {
             bool canSee = base.CanSeePlayer();
-            Debug.Log("CanSeePlayer: " + canSee);
             return canSee;
         }
 

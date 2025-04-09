@@ -23,7 +23,7 @@ namespace AS.Player
         public bool shootOnlyWhileAiming = true;
         public float maxRange;
         public Vector3 gunOffset;
-        public Bullet bulletPrefab;
+        public GameObject bombPrefab;
         public float fireRate;
 
         [Header("Cameras")]
@@ -51,7 +51,7 @@ namespace AS.Player
 
         private bool _isAiming;
         private bool _isBoosted;
-        private float _lastFiredTimer;
+        public float _lastFiredTimer;
 
         private bool _lastUsedGunLeft;
         private Camera _mainCamera;
@@ -212,45 +212,43 @@ namespace AS.Player
 
         private void Attack()
         {
-            if (shootOnlyWhileAiming && !_isAiming) return;
+            if (shootOnlyWhileAiming && !_isAiming)
+            {
+                Debug.Log("Not aiming!");
+                return;
+            }
 
-            if (_lastFiredTimer > 0) return;
+            if (_lastFiredTimer > 0)
+            {
+                Debug.Log("Timer greater than zero!");
+                return;
+            }
 
-            Vector3 spawnPoint = firePos.position;
+         // var spawnOffset = gunOffset.With(_lastUsedGunLeft ? gunOffset.x : -gunOffset.x);
+            var spawnPoint = transform.TransformPoint(firePos.position);
 
-            var ray = new Ray(firePos.position, firePos.forward);
-
-            Debug.DrawRay(ray.origin, ray.direction, Color.red, 5f);
+            var ray = _isAiming
+                ? _mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0))
+                : new Ray(firePos.position, firePos.forward);
 
             var target = firePos.position + ray.direction * maxRange;
-
-            Debug.DrawRay(firePos.position, firePos.position + ray.direction * maxRange, Color.green, 5f);
 
             if (Physics.Raycast(ray, out var hitInfo, maxRange, -1, QueryTriggerInteraction.Ignore))
             {
                 target = hitInfo.distance < 20f ? hitInfo.point : firePos.position + firePos.forward * maxRange;
             }
 
-            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject("BombPool");
-            if (bullet != null)
+            GameObject bomb = Instantiate(bombPrefab, firePos.position, Quaternion.identity);
+            if (bomb != null)
             {
-                var direction = (target - spawnPoint).normalized;
-                bullet.transform.position = spawnPoint;
-                Vector3 targetDir = (target - spawnPoint).normalized;
-                bullet.transform.rotation = Quaternion.LookRotation(targetDir);
-
-                bullet.GetComponent<ExplosiveProjectile>().shooter = this.gameObject;
-                bullet.SetActive(true);
-
-                var rb = bullet.GetComponent<Rigidbody>();
-                //rb.linearVelocity = Vector3.zero;
-                bullet.GetComponent<Rigidbody>().linearVelocity = targetDir * 10f;
-               // Debug.Log("Tank fired bullet!");
+                bomb.GetComponent<ExplosiveProjectile>().shooter = this.gameObject;
+                bomb.GetComponent<ExplosiveProjectile>().target = target;
+                //bullet.transform.LookAt(target);
             }
 
             _lastFiredTimer = FireDelay;
 
-            _lastUsedGunLeft = !_lastUsedGunLeft;
+       //   _lastUsedGunLeft = !_lastUsedGunLeft;
         }
 
         private void UpdateTimers(float deltaTime)

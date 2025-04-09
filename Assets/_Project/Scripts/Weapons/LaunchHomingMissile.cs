@@ -43,8 +43,8 @@ namespace AS.Weapons
                     Debug.Log("Launched missile!");
                     missile.transform.position = launchPos[i].position;
                     missile.SetActive(true);
-                    missile.GetComponent<HomingMissile>().target = target.transform.position;
-                    missile.GetComponent<HomingMissile>().shooter = this.gameObject;
+                 // missile.GetComponent<HomingMissile>().target = target.transform.position;
+               //   missile.GetComponent<HomingMissile>().shooter = this.gameObject;
                 }
             }
 

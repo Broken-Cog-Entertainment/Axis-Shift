@@ -32,6 +32,7 @@ namespace AS.Weapons
             yield return new WaitForSeconds(explosionDuration);
 
             exploded = false;
+            GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             ObjectPool.SharedInstance.ReturnToPool("BombPool", gameObject);
         }
 

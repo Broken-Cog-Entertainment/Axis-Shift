@@ -47,12 +47,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bd242aacc879f428cb7ac830d57818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shooter: {fileID: 0}
-  damageAmount: 50
   target: {fileID: 0}
   speed: 25
   rotateSpeed: 25
-  missileLifetime: 100
+  homingRange: 25
+  missileLifetime: 5
+  damageAmount: 50
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 384
 --- !u!54 &4223624053132686130
 Rigidbody:
   m_ObjectHideFlags: 0
